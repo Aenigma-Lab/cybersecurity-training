@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Training | Amazon Refund Notification</title>
+    <style>
+        :root {
+            --amazon-blue: #232f3e;
+            --amazon-orange: #ff9900;
+            --danger-red: #d63031;
+        }
+        body { font-family: 'Amazon Ember', Arial, sans-serif; margin: 0; background-color: #f3f3f3; color: #111; }
+
+        .nav-header { background: var(--amazon-blue); padding: 8px 10%; display: flex; align-items: center; justify-content: space-between; }
+        .nav-header .logo { height: 35px; }
+        .nav-header .search-bar { display: flex; flex: 1; max-width: 600px; margin: 0 20px; }
+        .nav-header .search-bar input { flex: 1; padding: 8px; border: none; border-radius: 4px 0 0 4px; }
+        .nav-header .search-bar button { background: var(--amazon-orange); border: none; padding: 8px 12px; border-radius: 0 4px 4px 0; color: #111; cursor: pointer; }
+        .nav-header .account-links { display: flex; color: white; font-size: 14px; }
+        .nav-header .account-links a { color: white; text-decoration: none; margin-left: 15px; }
+
+        .email-body { max-width: 600px; margin: 40px auto; background: white; padding: 40px; border: 1px solid #ddd; }
+
+        h1 { font-size: 22px; color: #333; }
+        .alert-box { border-left: 4px solid var(--amazon-orange); padding-left: 20px; margin: 25px 0; }
+
+        .amount-input { text-align: center; margin: 20px 0; }
+        .amount-input label { font-weight: bold; }
+        .amount-input input { padding: 8px; width: 100px; text-align: center; border: 1px solid #ccc; border-radius: 4px; }
+
+        .qr-container { text-align: center; background: #fafafa; padding: 30px; border: 1px dashed #ccc; margin: 20px 0; }
+        .refund-money { font-size: 18px; font-weight: bold; color: var(--amazon-orange); margin-bottom: 10px; }
+        .qr-code { width: 180px; height: 180px; background: #333; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 12px; }
+
+        .btn-claim { background: var(--amazon-orange); color: #111; padding: 12px 30px; border: none; border-radius: 4px; font-weight: bold; width: 100%; cursor: pointer; }
+
+        /* Forensic Report Overlay */
+        #forensicReport { display: none; margin-top: 30px; background: #2d3436; color: #fff; padding: 25px; border-radius: 8px; border-top: 6px solid var(--danger-red); }
+        .flag { color: #ff7675; font-weight: bold; }
+
+        footer { background: var(--amazon-blue); color: white; padding: 20px 10%; text-align: center; font-size: 12px; }
+        footer a { color: #ccc; text-decoration: none; margin: 0 10px; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="nav-header">
+    <img src="AMZN_BIG.D.svg" alt="Amazon Logo" class="logo">
+    <div class="search-bar">
+        <input type="text" placeholder="Search Amazon">
+        <button>🔍</button>
+    </div>
+    <div class="account-links">
+        <a href="#">Hello, Shubham</a>
+        <a href="#">Returns & Orders</a>
+        <a href="#">Cart</a>
+    </div>
+</div>
+
+<div class="email-body">
+    <h1>Action Required: Refund Pending for Order #402-8821-009</h1>
+    <p>Dear Customer,</p>
+    <p>Our records show that you were overcharged for your recent purchase. A refund of <strong>₹2,499.00</strong> is ready to be credited back to your account.</p>
+    
+    <div class="alert-box">
+        <p><strong>Note:</strong> Due to updated security protocols, refunds must now be verified via our <strong>Secure QR Gateway</strong> to prevent identity theft.</p>
+    </div>
+
+    <div class="amount-input">
+        <label for="amount">Enter Refund Amount (₹):</label>
+        <input type="number" id="amount" value="2499.00" min="0" step="0.01">
+    </div>
+
+    <div class="qr-container">
+        <div class="refund-money">Refund Money</div>
+        <div id="qrcode" class="qr-code"></div>
+        <p><small>Scan with any UPI app (PhonePe, GPay, Paytm) to accept the refund.</small></p>
+    </div>
+
+    <button class="btn-claim" onclick="revealLab()">I cannot scan, show other options</button>
+
+    <div id="forensicReport">
+        <h2 style="color:white;">🚨 Forensic Lab: The "Quishing" Attack</h2>
+        <p><span class="flag">🚩 FLAG 1: THE "RECEIVE" SCAM.</span> In UPI, you <strong>never</strong> need to scan a QR code or enter your PIN to *receive* money. If you scan a code to get a refund, you are actually authorizing a <strong>Payment</strong> *to* the scammer.</p>
+        <p><span class="flag">🚩 FLAG 2: URGENCY & SAFETY.</span> Scammers use terms like "Secure Gateway" or "Verify Identity" to make the fraud sound like a security feature.</p>
+        <p><span class="flag">🚩 FLAG 3: OFF-PLATFORM.</span> Amazon processes refunds automatically to your original payment method. They will never ask you to use a separate QR code or a third-party UPI app.</p>
+        <button onclick="location.reload()" style="background:#555; color:white; border:none; padding:10px; cursor:pointer; margin-top:10px;">Reset Exercise</button>
+    </div>
+</div>
+
+<footer>
+    <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+        <div>
+            <h4>Get to Know Us</h4>
+            <a href="#">Careers</a><br>
+            <a href="#">Blog</a><br>
+            <a href="#">About Amazon</a><br>
+            <a href="#">Investor Relations</a>
+        </div>
+        <div>
+            <h4>Make Money with Us</h4>
+            <a href="#">Sell products on Amazon</a><br>
+            <a href="#">Sell on Amazon Business</a><br>
+            <a href="#">Sell apps on Amazon</a><br>
+            <a href="#">Become an Affiliate</a>
+        </div>
+        <div>
+            <h4>Amazon Payment Products</h4>
+            <a href="#">Amazon Business Card</a><br>
+            <a href="#">Shop with Points</a><br>
+            <a href="#">Reload Your Balance</a><br>
+            <a href="#">Amazon Currency Converter</a>
+        </div>
+        <div>
+            <h4>Let Us Help You</h4>
+            <a href="#">Amazon and COVID-19</a><br>
+            <a href="#">Your Account</a><br>
+            <a href="#">Your Orders</a><br>
+            <a href="#">Shipping Rates & Policies</a>
+        </div>
+    </div>
+    <div style="border-top: 1px solid #555; padding-top: 10px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo" style="height: 20px; filter: brightness(0) invert(1);">
+        <p>© 1996-2023, Amazon.com, Inc. or its affiliates</p>
+    </div>
+</footer>
+
+<script>
+    function generateQR() {
+        const amount = document.getElementById('amount').value;
+        const upiId = '8356083921@okaxis'; // GPay UPI ID
+        const upiString = `upi://pay?pa=${upiId}&pn=Amazon Refund&am=${amount}&cu=INR&tn=Refund Payment`;
+
+        // Clear previous QR code
+        document.getElementById('qrcode').innerHTML = '';
+
+        // Generate new QR code
+        new QRCode(document.getElementById('qrcode'), {
+            text: upiString,
+            width: 180,
+            height: 180
+        });
+    }
+
+    function revealLab() {
+        document.getElementById('forensicReport').style.display = 'block';
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Generate initial QR code on page load
+    window.onload = function() {
+        generateQR();
+        document.getElementById('amount').addEventListener('input', generateQR);
+    };
+</script>
+
+</body>
+</html>

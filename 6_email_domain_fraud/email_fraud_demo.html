@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Domain Fraud</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      font-size: 20px;
+    }
+    h1 { color: #333; font-size: 36px; }
+    h2 { font-size: 28px; }
+    h3 { font-size: 24px; }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    button:hover { background: #45a049; }
+    .result {
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    .safe { background: #d4edda; color: #155724; }
+    .warning { background: #fff3cd; color: #856404; }
+    .danger { background: #f8d7da; color: #721c24; }
+    .example-box {
+      background: #e7f3ff;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 15px;
+    }
+    .explanation {
+      background: #fff;
+      padding: 15px;
+      border-left: 4px solid #4CAF50;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Email Domain Fraud</h1>
+  
+  <div class="card">
+    <h2>How Hackers Trick You</h2>
+    <p>Hackers use <b>look-alike domains</b> to make fake emails look real.</p>
+    <div class="example-box">
+      <strong>Real:</strong> company.com<br>
+      <strong>Fake:</strong> c0mpany.com (zero instead of letter O)
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Try It Yourself</h2>
+    <label>Expected legitimate domain:</label>
+    <input type="text" id="expectedDomain" placeholder="e.g., google.com" value="company.com">
+    
+    <label>From email address:</label>
+    <input type="text" id="fromEmail" placeholder="e.g., support@company.com">
+    
+    <button onclick="checkEmail()">Check if Suspicious</button>
+    
+    <div id="result"></div>
+  </div>
+
+  <div class="card">
+    <h2>Quick Examples</h2>
+    <button onclick="loadExample(1)" style="margin-right: 10px; margin-bottom: 10px;">Example 1: Look-Alike (c0mpany)</button>
+    <button onclick="loadExample(2)" style="margin-right: 10px; margin-bottom: 10px;">Example 2: Different TLD</button>
+    <button onclick="loadExample(3)" style="margin-bottom: 10px;">Example 3: Legitimate</button>
+
+    <div style="margin-top: 20px; padding-top: 15px; border-top: 2px dashed #ddd;">
+      <h3 style="color: #4CAF50;">🎯 Precihole Domains</h3>
+      <div id="preciholeButtons"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💡 How to Protect Yourself</h2>
+    <button onclick="toggleProtectionTips()" id="protectionBtn" style="margin-bottom: 15px;">Show Protection Tips</button>
+    <div id="protectionTips" style="display: none;">
+      <ol>
+        <li><strong>Always check the domain</strong> - look at the part after @</li>
+        <li><strong>Hover over links</strong> before clicking</li>
+        <li><strong>Verify requests</strong> through another channel (call the person)</li>
+        <li><strong>Look for typos</strong> - 0 vs O, 1 vs l, rn vs m</li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    function getDomain(email) {
+      if (!email) return '';
+      const match = email.match(/@(.+)$/);
+      return match ? match[1].toLowerCase() : '';
+    }
+
+    function levenshtein(a, b) {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
+      const m = a.length, n = b.length;
+      const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
+      for (let i=0;i<=m;i++) dp[i][0]=i;
+      for (let j=0;j<=n;j++) dp[0][j]=j;
+      for (let i=1;i<=m;i++) {
+        for (let j=1;j<=n;j++) {
+          const cost = a[i-1] === b[j-1] ? 0 : 1;
+          dp[i][j] = Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
+        }
+      }
+      return dp[m][n];
+    }
+
+    function getRootDomain(domain) {
+      const parts = domain.split('.');
+      if (parts.length <= 2) return domain;
+      return parts.slice(-2).join('.');
+    }
+
+    function checkEmail() {
+      const expected = getDomain(document.getElementById('expectedDomain').value) ||
+                       document.getElementById('expectedDomain').value.toLowerCase();
+      const fromEmail = document.getElementById('fromEmail').value;
+      const fromDomain = getDomain(fromEmail);
+      const resultDiv = document.getElementById('result');
+
+      if (!fromDomain) {
+        resultDiv.innerHTML = '';
+        return;
+      }
+
+      if (!expected) {
+        resultDiv.innerHTML = '';
+        return;
+      }
+
+      // Check for exact match - legitimate domain
+      if (fromDomain === expected || fromDomain.endsWith('.' + expected)) {
+        resultDiv.innerHTML = `<div class="result safe"><strong style="color: #155724;">✓ SAFE - Domain matches expected!</strong><br><br>Expected: <span style="color: #155724; font-weight: bold;">${expected}</span><br>Actual: <span style="color: #155724; font-weight: bold;">${fromDomain}</span><br><br>This appears to be a legitimate email address.</div>`;
+        return;
+      }
+
+      // Check similarity
+      const rootExpected = getRootDomain(expected);
+      const rootFrom = getRootDomain(fromDomain);
+      const distance = levenshtein(rootExpected, rootFrom);
+      const maxLen = Math.max(rootExpected.length, rootFrom.length);
+      const similarity = ((1 - distance / maxLen) * 100).toFixed(0);
+
+      // Check for tricks
+      const tricks = [];
+      if (fromDomain.includes('0')) tricks.push('contains "0" (looks like "o")');
+      if (fromDomain.includes('1')) tricks.push('contains "1" (looks like "l")');
+      if (fromDomain.includes('-')) tricks.push('contains hyphen');
+      if (!fromDomain.endsWith('.' + expected.split('.').pop())) {
+        tricks.push('different top-level domain (.com vs .co, etc)');
+      }
+
+      // Determine if suspicious
+      const isSuspicious = similarity >= 70 || tricks.length > 0;
+
+      if (isSuspicious) {
+        let resultHtml = `<div class="result danger"><strong style="color: #721c24;">🚨 SUSPICIOUS DOMAIN!</strong><br><br>`;
+        resultHtml += `Expected: <span style="color: #dc3545; font-weight: bold;">${expected}</span><br>`;
+        resultHtml += `Actual: <span style="color: #dc3545; font-weight: bold;">${fromDomain}</span><br>`;
+        resultHtml += `Similarity: ${similarity}%<br>`;
+
+        if (similarity >= 70) {
+          resultHtml += `<br>This looks like a <strong>look-alike domain</strong> attack!<br>`;
+          resultHtml += `The hacker replaced letters to trick you.`;
+        }
+
+        if (tricks.length > 0) {
+          resultHtml += `<br><br><strong>Red flags:</strong><ul>`;
+          tricks.forEach(t => resultHtml += `<li>${t}</li>`);
+          resultHtml += `</ul>`;
+        }
+
+        resultHtml += `</div>`;
+        resultDiv.innerHTML = resultHtml;
+      } else {
+        // Different enough to be safe (not a lookalike attack)
+        resultDiv.innerHTML = `<div class="result safe"><strong style="color: #155724;">✓ No Lookalike Detected</strong><br><br>Expected: <span style="color: #155724; font-weight: bold;">${expected}</span><br>Actual: <span style="color: #155724; font-weight: bold;">${fromDomain}</span><br>Similarity: ${similarity}%<br><br>This domain is <strong>not a look-alike attack</strong> (it differs significantly from the expected domain).</div>`;
+      }
+    }
+    
+    function loadExample(num) {
+      const examples = {
+        1: { expected: 'company.com', from: 'support@c0mpany.com' },
+        2: { expected: 'google.com', from: 'google-support@google.co' },
+        3: { expected: 'microsoft.com', from: 'bill@microsoft.com' }
+      };
+
+      const ex = examples[num];
+      document.getElementById('expectedDomain').value = ex.expected;
+      document.getElementById('fromEmail').value = ex.from;
+    }
+    
+    function loadPreciholeExample(num) {
+      const examples = {
+        // Precihole Sports Fraud Examples
+        1: { expected: 'precihole.com', from: 'support@precih0le.com', desc: 'Sports: Typosquatting (0 for O)', fraud: true },
+        2: { expected: 'precihole.com', from: 'help@preci-hole.com', desc: 'Sports: Hyphen substitution', fraud: true },
+        3: { expected: 'precihole.com', from: 'info@preciholesports.co', desc: 'Sports: Different TLD (.co)', fraud: true },
+        // Precihole Arms Fraud Examples
+        4: { expected: 'precihole.com', from: 'orders@precih0learms.com', desc: 'Arms: Zero for O in Arms', fraud: true },
+        5: { expected: 'precihole.com', from: 'sales@preciolearms.com', desc: 'Arms: Missing H in domain', fraud: true },
+        6: { expected: 'precihole.com', from: 'store@preciholearms.org', desc: 'Arms: Different TLD (.org)', fraud: true },
+        // Legitimate Precihole Examples
+        7: { expected: 'precihole.com', from: 'hr@precihole.com', desc: 'Legit: Standard HR email', fraud: false },
+        8: { expected: 'precihole.com', from: 'support@it.precihole.com', desc: 'Legit: Subdomain usage', fraud: false },
+        9: { expected: 'precihole.com', from: 'finance@precihole.com', desc: 'Legit: Finance department', fraud: false },
+        // Additional Fraudulent Examples (10-20)
+        10: { expected: 'precihole.com', from: 'admin@precih1le.com', desc: 'Sports: Number 1 for letter l', fraud: true },
+        11: { expected: 'precihole.com', from: 'tickets@pr3cihole.com', desc: 'Sports: Number 3 for letter e', fraud: true },
+        12: { expected: 'precihole.com', from: 'booking@preciho1e.com', desc: 'Sports: Number 1 for letter l', fraud: true },
+        13: { expected: 'precihole.com', from: 'support@precyhole.com', desc: 'Sports: Missing letter h (precy vs precih)', fraud: true },
+        14: { expected: 'precihole.com', from: 'sales@preciholee.com', desc: 'Sports: Extra letter e at end', fraud: true },
+        15: { expected: 'precihole.com', from: 'contact@preciholde.com', desc: 'Sports: Extra letter d inserted', fraud: true },
+        16: { expected: 'precihole.com', from: 'orders@pricehole.com', desc: 'Sports: Missing letter c (price vs price)', fraud: true },
+        17: { expected: 'precihole.com', from: 'info@precihole-sports.com', desc: 'Sports: Hyphen in domain', fraud: true },
+        18: { expected: 'precihole.com', from: 'support@precihole-email.com', desc: 'Sports: Extra word in domain', fraud: true },
+        19: { expected: 'precihole.com', from: 'sales@preciholestore.net', desc: 'Sports: Different TLD (.net)', fraud: true },
+        20: { expected: 'precihole.com', from: 'orders@precih0learms.co', desc: 'Arms: Zero for O + .co TLD', fraud: true },
+        // Additional Legitimate Examples (21-25)
+        21: { expected: 'precihole.com', from: 'admin@precihole.com', desc: 'Legit: Administrator email', fraud: false },
+        22: { expected: 'precihole.com', from: 'sales@precihole.com', desc: 'Legit: Sales department', fraud: false },
+        23: { expected: 'precihole.com', from: 'marketing@precihole.com', desc: 'Legit: Marketing department', fraud: false },
+        24: { expected: 'precihole.com', from: 'support@sports.precihole.com', desc: 'Legit: Sports subdomain', fraud: false },
+        25: { expected: 'precihole.com', from: 'info@arms.precihole.com', desc: 'Legit: Arms subdomain', fraud: false }
+      };
+
+      const ex = examples[num];
+      document.getElementById('expectedDomain').value = ex.expected;
+      document.getElementById('fromEmail').value = ex.from;
+    }
+
+    // Shuffle function
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Generate buttons - Example 1 first, rest shuffled
+    function shuffleExamples() {
+      // Put example 1 first, then shuffle the rest
+      const exampleIds = [1, ...shuffleArray([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])];
+      renderPreciholeButtons(exampleIds);
+    }
+
+    // Render buttons
+    function renderPreciholeButtons(order) {
+      const container = document.getElementById('preciholeButtons');
+      container.innerHTML = '';
+      order.forEach(id => {
+        const ex = getPreciholeExample(id);
+        const btn = document.createElement('button');
+        btn.onclick = () => loadPreciholeExample(id);
+        btn.style.marginRight = '8px';
+        btn.style.marginBottom = '8px';
+        btn.style.padding = '6px 10px';
+        btn.style.fontSize = '16px';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '4px';
+        btn.style.cursor = 'pointer';
+        btn.style.background = '#4CAF50';
+        btn.style.color = 'white';
+        btn.textContent = ex.desc.split(':')[0] + ': ' + (ex.from.includes('@') ? ex.from.split('@')[1] : ex.from);
+        container.appendChild(btn);
+      });
+    }
+
+    function getPreciholeExample(id) {
+      const examples = {
+        1: { expected: 'precihole.com', from: 'support@precih0le.com', desc: 'Sports: Typosquatting (0 for O)', fraud: true },
+        2: { expected: 'precihole.com', from: 'help@preci-hole.com', desc: 'Sports: Hyphen substitution', fraud: true },
+        3: { expected: 'precihole.com', from: 'info@preciholesports.co', desc: 'Sports: Different TLD (.co)', fraud: true },
+        4: { expected: 'precihole.com', from: 'orders@precih0learms.com', desc: 'Arms: Zero for O in Arms', fraud: true },
+        5: { expected: 'precihole.com', from: 'sales@preciolearms.com', desc: 'Arms: Missing H in domain', fraud: true },
+        6: { expected: 'precihole.com', from: 'store@preciholearms.org', desc: 'Arms: Different TLD (.org)', fraud: true },
+        7: { expected: 'precihole.com', from: 'hr@precihole.com', desc: 'Legit: Standard HR email', fraud: false },
+        8: { expected: 'precihole.com', from: 'support@it.precihole.com', desc: 'Legit: Subdomain usage', fraud: false },
+        9: { expected: 'precihole.com', from: 'finance@precihole.com', desc: 'Legit: Finance department', fraud: false },
+        10: { expected: 'precihole.com', from: 'admin@precih1le.com', desc: 'Sports: Number 1 for letter l', fraud: true },
+        11: { expected: 'precihole.com', from: 'tickets@pr3cihole.com', desc: 'Sports: Number 3 for letter e', fraud: true },
+        12: { expected: 'precihole.com', from: 'booking@preciho1e.com', desc: 'Sports: Number 1 for letter l', fraud: true },
+        13: { expected: 'precihole.com', from: 'support@precyhole.com', desc: 'Sports: Missing letter h', fraud: true },
+        14: { expected: 'precihole.com', from: 'sales@preciholee.com', desc: 'Sports: Extra letter e at end', fraud: true },
+        15: { expected: 'precihole.com', from: 'contact@preciholde.com', desc: 'Sports: Extra letter d inserted', fraud: true },
+        16: { expected: 'precihole.com', from: 'orders@pricehole.com', desc: 'Sports: Missing letter c', fraud: true },
+        17: { expected: 'precihole.com', from: 'info@precihole-sports.com', desc: 'Sports: Hyphen in domain', fraud: true },
+        18: { expected: 'precihole.com', from: 'support@precihole-email.com', desc: 'Sports: Extra word in domain', fraud: true },
+        19: { expected: 'precihole.com', from: 'sales@preciholestore.net', desc: 'Sports: Different TLD (.net)', fraud: true },
+        20: { expected: 'precihole.com', from: 'orders@precih0learms.co', desc: 'Arms: Zero for O + .co TLD', fraud: true },
+        21: { expected: 'precihole.com', from: 'admin@precihole.com', desc: 'Legit: Administrator email', fraud: false },
+        22: { expected: 'precihole.com', from: 'sales@precihole.com', desc: 'Legit: Sales department', fraud: false },
+        23: { expected: 'precihole.com', from: 'marketing@precihole.com', desc: 'Legit: Marketing department', fraud: false },
+        24: { expected: 'precihole.com', from: 'support@sports.precihole.com', desc: 'Legit: Sports subdomain', fraud: false },
+        25: { expected: 'precihole.com', from: 'info@arms.precihole.com', desc: 'Legit: Arms subdomain', fraud: false }
+      };
+      return examples[id];
+    }
+
+    // Initialize shuffled buttons on page load
+    window.onload = function() {
+      shuffleExamples();
+    };
+
+    function toggleProtectionTips() {
+      const tipsDiv = document.getElementById('protectionTips');
+      const btn = document.getElementById('protectionBtn');
+      if (tipsDiv.style.display === 'none') {
+        tipsDiv.style.display = 'block';
+        btn.textContent = 'Hide Protection Tips';
+      } else {
+        tipsDiv.style.display = 'none';
+        btn.textContent = 'Show Protection Tips';
+      }
+    }
+  </script>
+  
+  <!-- <div class="explanation">
+    <h3>💡 How to Protect Yourself</h3>
+    <ol>
+      <li><strong>Always check the domain</strong> - look at the part after @</li>
+      <li><strong>Hover over links</strong> before clicking</li>
+      <li><strong>Verify requests</strong> through another channel (call the person)</li>
+      <li><strong>Look for typos</strong> - 0 vs O, 1 vs l, rn vs m</li>
+    </ol>
+  </div> -->
+</body>
+</html>
+

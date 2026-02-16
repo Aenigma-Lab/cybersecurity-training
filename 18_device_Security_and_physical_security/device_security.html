@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Security Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            animation: slideIn 0.5s ease-out;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 36px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5);
+        }
+
+        .secondary-btn {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .secondary-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.5);
+        }
+
+        .danger-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .danger-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Windows Key Button Styles */
+        .windows-key-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .windows-key {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 20px rgba(0, 120, 212, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .windows-key::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .windows-key:active::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .windows-key:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 120, 212, 0.5);
+        }
+
+        .windows-key.pressed {
+            background: linear-gradient(135deg, #005a9e, #004080);
+            transform: scale(0.92);
+            box-shadow: 0 3px 10px rgba(0, 120, 212, 0.3);
+        }
+
+        .windows-key.locking {
+            animation: winLocking 0.5s ease-in-out;
+        }
+
+        @keyframes winLocking {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(0.8) rotate(-5deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            75% { transform: scale(0.9) rotate(-3deg); }
+        }
+
+        .key-hint {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-radius: 10px;
+            min-width: 60px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .key-hint:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #007bff;
+        }
+
+        .key-hint.pressed {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            transform: scale(0.92);
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
+        }
+
+        .key-hint.locking {
+            animation: lLocking 0.5s ease-in-out;
+        }
+
+        @keyframes lLocking {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            20% { transform: scale(0.85) rotate(-10deg); }
+            40% { transform: scale(1.15) rotate(10deg); }
+            60% { transform: scale(0.95) rotate(-5deg); }
+            80% { transform: scale(1.05) rotate(3deg); }
+        }
+
+        .plus-sign {
+            font-size: 24px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.info {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Lock Screen Styles */
+        .lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .lock-screen.active {
+            display: flex;
+            animation: lockAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes lockAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+                filter: blur(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .lock-screen.shake {
+            animation: lockShake 0.5s ease-in-out;
+        }
+
+        @keyframes lockShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        .lock-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+            animation: lockPulse 2s infinite;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+        }
+
+        @keyframes lockPulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+            }
+            50% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 40px rgba(255,255,255,0.5));
+            }
+        }
+
+        .lock-screen h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+            animation: textFadeIn 0.5s ease-out 0.2s both;
+            background: linear-gradient(135deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes textFadeIn {
+            from { opacity: 0; transform: translateY(30px); letter-spacing: 10px; }
+            to { opacity: 1; transform: translateY(0); letter-spacing: 0; }
+        }
+
+        .lock-screen p {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: textFadeIn 0.5s ease-out 0.4s both;
+        }
+
+        .unlock-btn {
+            padding: 20px 50px;
+            font-size: 22px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: textFadeIn 0.5s ease-out 0.6s both;
+            text-transform: uppercase;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .unlock-btn:active {
+            transform: translateY(0) scale(0.95);
+        }
+
+        /* Animated background particles */
+        .lock-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 115, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(72, 198, 239, 0.2) 0%, transparent 40%);
+            animation: bgShift 10s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes bgShift {
+            from { transform: translateX(0) translateY(0); }
+            to { transform: translateX(20px) translateY(-20px); }
+        }
+
+        /* Countdown animation */
+        .countdown {
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            animation: countdownPulse 1s infinite;
+        }
+
+        @keyframes countdownPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Unlock animation */
+        .unlock-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .unlock-animation.active {
+            display: flex;
+            animation: unlockFade 0.5s ease-out forwards;
+        }
+
+        @keyframes unlockFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .unlock-icon {
+            font-size: 100px;
+            animation: unlockBounce 0.6s ease-out;
+        }
+
+        @keyframes unlockBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Shortcut info */
+        .shortcut-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f1f3f4;
+            border-radius: 8px;
+        }
+
+        kbd {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-family: monospace;
+            box-shadow: 0 2px 0 #ccc;
+        }
+
+        .active-keys {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .key-indicator {
+            padding: 8px 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #495057;
+            transition: all 0.2s ease;
+        }
+
+        .key-indicator.active {
+            background: #007bff;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Device Security Demo</h1>
+        <p>Advanced locking system with Windows + L simulation</p>
+
+        <div class="instructions">
+            <strong>💡 Quick Tip:</strong> Click the Windows key button, then click 'L' key button to lock screen
+        </div>
+
+        <div class="windows-key-container">
+            <button class="windows-key" id="windowsKeyBtn" title="Windows Key">⊞</button>
+            <span class="plus-sign">+</span>
+            <button class="key-hint" id="lKeyBtn">L</button>
+        </div>
+
+        <div class="active-keys">
+            <div class="key-indicator" id="winIndicator">WIN</div>
+            <div class="key-indicator" id="lIndicator">L</div>
+        </div>
+
+        <div class="buttons-container">
+            <div class="row">
+                <button class="primary-btn" id="autoLockBtn">⏰ Set Auto Lock (3 min)</button>
+                <button class="danger-btn" id="manualLockBtn">🔒 Lock Now</button>
+            </div>
+        </div>
+
+        <div class="shortcut-info">
+            <span>Keyboard shortcut:</span>
+            <kbd>Win</kbd> + <kbd>L</kbd>
+        </div>
+
+        <div class="status success" id="status"></div>
+    </div>
+
+    <!-- Lock Screen -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-icon">🔒</div>
+        <h1>🔐 Device Locked</h1>
+        <p>Your device is securely locked</p>
+        <div class="countdown" id="countdown"></div>
+        <button class="unlock-btn" id="unlockBtn">🔓 Unlock Device</button>
+    </div>
+
+    <!-- Unlock Animation -->
+    <div class="unlock-animation" id="unlockAnimation">
+        <div class="unlock-icon">🔓</div>
+    </div>
+
+    <script>
+        // Elements
+        const windowsKeyBtn = document.getElementById('windowsKeyBtn');
+        const lKeyBtn = document.getElementById('lKeyBtn');
+        const winIndicator = document.getElementById('winIndicator');
+        const lIndicator = document.getElementById('lIndicator');
+        const autoLockBtn = document.getElementById('autoLockBtn');
+        const manualLockBtn = document.getElementById('manualLockBtn');
+        const statusDiv = document.getElementById('status');
+        const lockScreen = document.getElementById('lockScreen');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const unlockAnimation = document.getElementById('unlockAnimation');
+        const countdown = document.getElementById('countdown');
+
+        let autoLockTimeout;
+        let windowsKeyActive = false;
+        let lKeyActive = false;
+        let countdownInterval;
+
+        // Show status message
+        function showStatus(message, type = 'success') {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            setTimeout(() => {
+                statusDiv.textContent = '';
+                statusDiv.className = 'status';
+            }, 3000);
+        }
+
+        // Lock screen with animation
+        function doLockScreen() {
+            // Add locking animation to buttons
+            windowsKeyBtn.classList.add('locking');
+            lKeyBtn.classList.add('locking');
+            
+            setTimeout(() => {
+                windowsKeyBtn.classList.remove('locking');
+                lKeyBtn.classList.remove('locking');
+                
+                lockScreen.classList.add('active');
+                lockScreen.classList.add('shake');
+                
+                // Remove shake after animation
+                setTimeout(() => {
+                    lockScreen.classList.remove('shake');
+                }, 500);
+                
+                // Start countdown animation
+                let count = 3;
+                countdown.textContent = count;
+                countdownInterval = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        countdown.textContent = count;
+                        countdown.style.animation = 'none';
+                        countdown.offsetHeight; // Trigger reflow
+                        countdown.style.animation = 'countdownPulse 1s infinite';
+                    } else {
+                        countdown.textContent = '🔒';
+                        clearInterval(countdownInterval);
+                    }
+                }, 1000);
+                
+                showStatus('🔒 Device locked securely!', 'warning');
+            }, 300);
+        }
+
+        // Unlock screen with animation
+        function unlockScreen() {
+            // Show unlock animation
+            unlockAnimation.classList.add('active');
+            
+            setTimeout(() => {
+                unlockAnimation.classList.remove('active');
+                lockScreen.classList.remove('active');
+                
+                // Clear countdown
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                // Reset key states
+                windowsKeyActive = false;
+                lKeyActive = false;
+                updateKeyIndicators();
+                
+                // Clear auto-lock timeout
+                if (autoLockTimeout) {
+                    clearTimeout(autoLockTimeout);
+                    autoLockTimeout = null;
+                }
+                
+                showStatus('🔓 Device unlocked!', 'success');
+            }, 500);
+        }
+
+        // Update key indicators
+        function updateKeyIndicators() {
+            winIndicator.classList.toggle('active', windowsKeyActive);
+            lIndicator.classList.toggle('active', lKeyActive);
+            windowsKeyBtn.classList.toggle('pressed', windowsKeyActive);
+            lKeyBtn.classList.toggle('pressed', lKeyActive);
+        }
+
+        // Windows Key Button (Click simulation)
+        windowsKeyBtn.addEventListener('click', () => {
+            windowsKeyActive = !windowsKeyActive;
+            updateKeyIndicators();
+            
+            if (windowsKeyActive && lKeyActive) {
+                setTimeout(doLockScreen, 300);
+            }
+        });
+
+        // L Key Button (Click simulation)
+        lKeyBtn.addEventListener('click', () => {
+            lKeyActive = !lKeyActive;
+            updateKeyIndicators();
+            
+            if (windowsKeyActive && lKeyActive) {
+                setTimeout(doLockScreen, 300);
+            }
+        });
+
+        // Auto-lock button
+        autoLockBtn.addEventListener('click', () => {
+            if (autoLockTimeout) {
+                clearTimeout(autoLockTimeout);
+            }
+            showStatus('⏰ Auto-lock set for 3 minutes.', 'info');
+            autoLockTimeout = setTimeout(doLockScreen, 3 * 60 * 1000); // 3 minutes
+        });
+
+        // Manual lock button
+        manualLockBtn.addEventListener('click', doLockScreen);
+
+        // Unlock button
+        unlockBtn.addEventListener('click', unlockScreen);
+
+        // Keyboard event listeners
+        document.addEventListener('keydown', (event) => {
+            // Windows key (Meta key)
+            if (event.key === 'Meta') {
+                event.preventDefault();
+                windowsKeyActive = true;
+                updateKeyIndicators();
+            }
+            
+            // L key when Windows key is pressed
+            if (event.key === 'l' || event.key === 'L') {
+                event.preventDefault();
+                lKeyActive = true;
+                updateKeyIndicators();
+                
+                if (windowsKeyActive) {
+                    doLockScreen();
+                }
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'Meta') {
+                windowsKeyActive = false;
+                updateKeyIndicators();
+            }
+            
+            if (event.key === 'l' || event.key === 'L') {
+                lKeyActive = false;
+                updateKeyIndicators();
+            }
+        });
+
+        // Prevent default Windows key behavior
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Meta') {
+                event.preventDefault();
+            }
+        });
+
+        // Initialize
+        showStatus('✨ System ready! Click Win + L to lock.', 'success');
+    </script>
+</body>
+</html>

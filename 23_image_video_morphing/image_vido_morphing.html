@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image and Video Morphing Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .fullscreen-overlay.active {
+            display: flex;
+        }
+        .fullscreen-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            cursor: pointer;
+        }
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+        .fullscreen-close:hover {
+            transform: scale(1.2);
+        }
+        .video-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+            border: 2px solid #333;
+        }
+        .info {
+            margin: 20px 0;
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image and Video Morphing Awareness</h1>
+    <p class="info">This page demonstrates morphing effects on images and videos. Click on any image to view fullscreen. Click on videos to play them.</p>
+
+    <!-- Fullscreen overlay for images -->
+    <div class="fullscreen-overlay" id="fullscreen-overlay" onclick="closeImageFullscreen(event)">
+        <span class="fullscreen-close" onclick="closeImageFullscreen(event)">&times;</span>
+        <img id="fullscreen-img" src="" alt="Fullscreen Image" onclick="event.stopPropagation()">
+        <span class="fullscreen-exit-hint">Press ESC or click × to exit fullscreen</span>
+    </div>
+
+    <h2>Image Gallery</h2>
+    
+    <!-- Gallery Grid - All images visible -->
+    <div class="image-gallery">
+        <div class="gallery-item">
+            <img src="Gemini_Generated_Image_oc33u7oc33u7oc33.png" alt="Gemini Generated Image" onclick="toggleImageFullscreen(this)">
+        </div>
+        
+        <div class="gallery-item">
+            <img src="sharukhkhna.avif" alt="Sharukh Khna" onclick="toggleImageFullscreen(this)">
+        </div>
+    </div>
+
+    <style>
+        /* Gallery Grid Styles */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Fullscreen overlay styles */
+        .fullscreen-exit-hint {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+    </style>
+
+    <h2>Video Morphing</h2>
+    <div class="video-container" id="video-section-1">
+        <video src="5ad8ac48-59bc-4510-a643-43818c90ba02.mp4" muted controls onerror="handleVideoError(this, '5ad8ac48-59bc-4510-a643-43818c90ba02.mp4')"></video>
+    </div>
+    <div class="video-container" id="video-section-2">
+        <video src="fe3e3103-4f55-4210-8557-8641c563a4a8.mp4" muted controls onerror="handleVideoError(this, 'fe3e3103-4f55-4210-8557-8641c563a4a8.mp4')"></video>
+    </div>
+    <div class="video-container" id="video-section-3">
+        <video src="modi_trump_fight.mp4" muted controls onerror="handleVideoError(this, 'modi_trump_fight.mp4')"></video>
+    </div>
+
+    <script>
+        const videoContainers = document.querySelectorAll('.video-container');
+
+        // Handle video loading errors
+        function handleVideoError(videoElement, videoName) {
+            console.error(`Error loading video: ${videoName}`);
+            const container = videoElement.parentElement;
+            container.innerHTML = `
+                <div style="padding: 40px; text-align: center; background: #fee; border: 2px solid #fcc; border-radius: 8px; margin: 10px 0;">
+                    <p style="color: #c00; margin-bottom: 10px;">⚠️ Video failed to load: ${videoName}</p>
+                    <p style="color: #666;">Please check if the file exists and try refreshing the page.</p>
+                </div>
+            `;
+        }
+
+        // Toggle image fullscreen
+        function toggleImageFullscreen(imgElement) {
+            const overlay = document.getElementById('fullscreen-overlay');
+            const fullscreenImg = document.getElementById('fullscreen-img');
+            
+            if (overlay && fullscreenImg) {
+                fullscreenImg.src = imgElement.src;
+                fullscreenImg.alt = imgElement.alt;
+                overlay.classList.add('active');
+                
+                // Prevent body scroll when in fullscreen
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close image fullscreen
+        function closeImageFullscreen(event) {
+            // Don't close if clicking on the image itself
+            if (event && event.target === event.currentTarget || event && event.target.classList.contains('fullscreen-close')) {
+                const overlay = document.getElementById('fullscreen-overlay');
+                
+                if (overlay && overlay.classList.contains('active')) {
+                    overlay.classList.remove('active');
+                    // Restore body scroll
+                    document.body.style.overflow = '';
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('fullscreen-overlay');
+                if (overlay && overlay.classList.contains('active')) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Initial setup - Show all videos
+        document.addEventListener('DOMContentLoaded', () => {
+            videoContainers.forEach(container => {
+                container.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

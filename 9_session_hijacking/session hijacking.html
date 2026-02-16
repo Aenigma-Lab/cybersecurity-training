@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Hijacking Explained</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Session Hijacking</h1>
+<p style="text-align:center;">Visual guide with minimal text.</p>
+
+<section id="what-is">
+    <h2>What is Session Hijacking?</h2>
+    <p>Stealing a user's session to access their account.</p>
+</section>
+
+<section id="how-it-works">
+    <h2>How It Works</h2>
+    <ul>
+        <li>Intercept session ID.</li>
+        <li>Use it to impersonate user.</li>
+    </ul>
+</section>
+
+<section id="types">
+    <h2>Types</h2>
+    <ul>
+        <li>Active: Direct takeover.</li>
+        <li>Passive: Monitor and steal.</li>
+    </ul>
+</section>
+
+<section id="prevention">
+    <h2>Prevention</h2>
+    <ul>
+        <li>Use HTTPS.</li>
+        <li>Regenerate session IDs.</li>
+        <li>Monitor logs.</li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples</h2>
+    <ul>
+        <li>testphp.vulnweb.com: Vulnerable to session attacks.</li>
+        <li>Instagram: Target of session ID theft.</li>
+    </ul>
+</section>
+
+</body>
+</html>

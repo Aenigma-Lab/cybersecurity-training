@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuards: Stop Fake SMS UPI Fraud</title>
+    <style>
+        :root {
+            --primary: #1a2a6c;
+            --accent: #b21f1f;
+            --light: #f8f9fa;
+            --dark: #2d3436;
+            --success: #2ecc71;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f0f2f5;
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(26, 42, 108, 0.8), rgba(26, 42, 108, 0.8)), 
+                        url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: -40px auto 40px;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h2 { color: var(--primary); font-size: 1.8rem; margin-top: 0; }
+        
+        /* Grid Layout for Fraud Types */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .method-box {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .method-box:hover { transform: translateY(-5px); }
+        .method-box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .method-content { padding: 15px; }
+        .method-content h3 { margin: 0 0 10px 0; color: var(--accent); font-size: 1.2rem; }
+
+        /* Prevention Section */
+        .prevention-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .prevention-img {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 12px;
+        }
+        .prevention-list {
+            flex: 1;
+            min-width: 300px;
+            list-style: none;
+            padding: 0;
+        }
+        .prevention-list li {
+            background: #e8f5e9;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-left: 5px solid var(--success);
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .alert-banner {
+            background: #ffebee;
+            border: 2px dashed var(--accent);
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        footer { text-align: center; padding: 40px; color: #636e72; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Fake UPI Overpayment Scam Awareness</h1>
+    <p>Learn to identify fake UPI messages claiming extra money sent by mistake and protect your money.</p>
+</header>
+
+<div class="container">
+    
+    <section class="card">
+        <h2>How Fake UPI SMS Fraud Happens</h2>
+        <p>Scammers send deceptive SMS messages that look like official UPI notifications.</p>
+        
+        <div class="grid">
+            <div class="method-box">
+                <img src="https://images.unsplash.com/photo-1589156191108-c762ff4b96ab?auto=format&fit=crop&w=500&q=60" alt="Fake Payment Request">
+                <div class="method-content">
+                    <h3>Fake Payment Requests</h3>
+                    <p>You receive an SMS claiming a payment of ₹X has been requested from your UPI ID. Panic makes you click the malicious link.</p>
+                </div>
+            </div>
+
+            <div class="method-box">
+                <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=500&q=60" alt="KYC Update">
+                <div class="method-content">
+                    <h3>Fake Sms claim</h3>
+                    <p>SMS claims your UPI account will be blocked unless you update KYC via their fake link.</p>
+                </div>
+            </div>
+
+            <div class="method-box">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=500&q=60" alt="Prize Winnings">
+                <div class="method-content">
+                    <h3>Fake Prize Winnings</h3>
+                    <p>"Congratulations! You've won ₹1,000,000" - Just a trick to steal your UPI credentials.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Examples of Fake Overpayment SMS Messages</h2>
+        <p>These are examples of fake SMS messages used in overpayment scams. They look like real UPI notifications but are designed to trick you into sending money back:</p>
+
+        <div class="grid">
+            <div class="method-box">
+                <img src="fake_message.jpeg" alt="Fake Overpayment Message">
+                <div class="method-content">
+                    <h3>Fake Extra Payment Claim</h3>
+                    <p>This message claims an extra ₹500 was sent by mistake and asks for immediate refund. Notice how it mimics a real transaction SMS.</p>
+                </div>
+            </div>
+
+            <div class="method-box">
+                <img src="fake_message.png" alt="Fake Refund Request">
+                <div class="method-content">
+                    <h3>Urgent Refund Demand</h3>
+                    <p>Claims you received ₹1,000 instead of ₹500 and demands quick return of the difference. Scammers use urgency to prevent verification.</p>
+                </div>
+            </div>
+
+            <div class="method-box">
+                <img src="Pasted image.png" alt="Fake Transaction Mimic">
+                <div class="method-content">
+                    <h3>Mimicked Transaction Alert</h3>
+                    <p>Looks exactly like a genuine UPI SMS but includes a fake refund request. Always check your UPI app directly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>How to Prevent It</h2>
+        <div class="prevention-row">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60" class="prevention-img" alt="Safe Banking">
+            <ul class="prevention-list">
+                <li>✅ NEVER click on links in SMS messages claiming to be from your bank.</li>
+                <li>✅ Verify all UPI transactions directly in your UPI app.</li>
+                <li>✅ Check the sender's number - banks use official shortcodes (e.g., 56263).</li>
+                <li>✅ Never share your UPI PIN or OTP with anyone.</li>
+                <li>✅ Enable UPI app lock and use biometric authentication.</li>
+                <li>✅ Report suspicious SMS to 1909 (DoT) or forward to 7726.</li>
+            </ul>
+        </div>
+        
+        <div class="alert-banner">
+            ⚠️ REMEMBER: If someone claims to have sent you extra money by mistake, ALWAYS check your UPI app first. Never send refunds based on SMS alone.
+        </div>
+    </section>
+
+    <section class="card" style="border-top: 5px solid var(--accent);">
+        <h2>In Case of Fraud?</h2>
+        <p>If you have shared your UPI PIN or OTP accidentally:</p>
+        <ol>
+            <li>Immediately open your UPI app and <strong>change your UPI PIN</strong>.</li>
+            <li>Call your bank's <strong>official helpline</strong> to block your UPI and account.</li>
+            <li>Report the fraud to <strong>NPCI</strong> at <strong>1800-111-4455</strong> or email <strong>support@npci.org.in</strong>.</li>
+            <li>File complaint at <strong>cybercrime.gov.in</strong> or <strong>1930</strong> (Helpline number).</li>
+            <li>Take screenshots of the fake SMS and fraud details as evidence.</li>
+        </ol>
+    </section>
+
+    
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Awareness Portal | Stay Safe Online</p>
+    <p style="font-size: 0.8rem;">Reminder: Your next Ekadashi is on 23 April.</p>
+</footer>
+
+</body>
+</html>
+

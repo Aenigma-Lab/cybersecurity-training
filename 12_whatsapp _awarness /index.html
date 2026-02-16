@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Security Awareness Training</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: #075E54;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            color: #25D366;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #25D366, #128C7E);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .section-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: #f8fffa;
+        }
+
+        .section-icon {
+            font-size: 2em;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            flex: 1;
+            font-size: 1.2em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            color: #25D366;
+            transition: transform 0.3s ease;
+        }
+
+        .section.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .section.active .section-header {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%);
+            border-bottom: 2px solid #25D366;
+        }
+
+        .content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: #fafafa;
+        }
+
+        .section.active .content {
+            max-height: 500px;
+            padding: 20px 25px;
+        }
+
+        .content p {
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .content ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .content li {
+            margin: 10px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .tip-box strong {
+            color: #856404;
+        }
+
+        /* Quiz Section */
+        .quiz {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .quiz h2 {
+            color: #075E54;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8fffa;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            border-color: #25D366;
+        }
+
+        .question p {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover {
+            border-color: #25D366;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #25D366;
+            background: #e8f5e8;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-result.pass {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .quiz-result.fail {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        /* Checklist */
+        .checklist {
+            margin-top: 20px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e0e0e0;
+        }
+
+        .checklist-item:hover {
+            border-color: #25D366;
+        }
+
+        .checklist-item.completed {
+            background: #e8f5e8;
+            border-color: #25D366;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #25D366;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .checklist-item.completed .checkbox {
+            background: #25D366;
+        }
+
+        .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .checklist-item.completed .checkbox::after {
+            opacity: 1;
+        }
+
+        .checklist-item span {
+            flex: 1;
+        }
+
+        .checklist-item.completed span {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        /* Completion Badge */
+        .completion-badge {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 20px;
+            color: white;
+            margin-top: 30px;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .completion-badge.show {
+            display: block;
+        }
+
+        .completion-badge h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .completion-badge p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .section-header {
+                padding: 15px;
+            }
+            
+            .section-icon {
+                font-size: 1.5em;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .quiz-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 10px);
+        }
+
+        /* Interactive animations */
+        .section-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">🔒</div>
+            <h1>WhatsApp Security Training</h1>
+            <p>Learn to protect yourself from online threats and stay safe on WhatsApp</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-title">📊 Your Progress</span>
+                <span class="progress-percentage" id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Security Tips Section -->
+        <div class="section" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #ff6b6b, #ee5a5a);">🎣</div>
+                <h2>How to Get Hacked - Phishing Awareness</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="content">
+                <p>Hackers use various methods to gain access to your WhatsApp account:</p>
+                <ul>
+                    <li><strong>Phishing Links:</strong> Fake links that look legitimate but steal your credentials</li>
+                    <li><strong>Verification Code Scam:</strong> Attackers trick you into sharing the 6-digit verification code</li>
+                    <li><strong>Malware:</strong> Malicious software hidden in shared files or apps</li>
+                    <li><strong>SIM Swapping:</strong> Criminals transfer your number to their SIM card</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>💡 Pro Tip:</strong> WhatsApp will NEVER ask for your verification code. Never share it with anyone, not even friends or family!
+                </div>
+            </div>
+        </div>
+
+        <div class="section" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #feca57, #ff9f43);">🛡️</div>
+                <h2>Prevent Fraud & Scams</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="content">
+                <p>Stay alert against these common scams:</p>
+                <ul>
+                    <li><strong>Urgency Scams:</strong> "Emergency" requests demanding immediate money transfer</li>
+                    <li><strong>Impersonation:</strong> Scammers pretending to be friends, family, or officials</li>
+                    <li><strong>Fake Job Offers:</strong> Too-good-to-be-true job opportunities requiring payment</li>
+                    <li><strong>Lottery Winnings:</strong> Messages claiming you've won prizes you never entered</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>💡 Always Verify:</strong> Call your friend on their known number to confirm before sending money, even if the message seems urgent!
+                </div>
+            </div>
+        </div>
+
+        <div class="section" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #48dbfb, #0abde3);">🔐</div>
+                <h2>Two-Factor Authentication (2FA)</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="content">
+                <p><strong>What is 2FA?</strong> An extra layer of security that requires a PIN when registering your phone number with WhatsApp.</p>
+                <p><strong>Steps to enable:</strong></p>
+                <ol style="margin: 15px 0; padding-left: 20px;">
+                    <li style="margin: 8px 0;">Open WhatsApp Settings</li>
+                    <li style="margin: 8px 0;">Tap Account → Two-step verification</li>
+                    <li style="margin: 8px 0;">Enter a 6-digit PIN</li>
+                    <li style="margin: 8px 0;">Add an optional email for recovery</li>
+                </ol>
+                <div class="tip-box">
+                    <strong>💡 Remember:</strong> Choose a PIN you'll remember but others won't guess. Avoid simple numbers like 123456 or your birth date!
+                </div>
+            </div>
+        </div>
+
+        <div class="section" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #5f27cd, #341f97);">📥</div>
+                <h2>Disable Auto Media Download</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="content">
+                <p>Auto-downloading media can expose you to malicious files. Here's how to disable it:</p>
+                <ol style="margin: 15px 0; padding-left: 20px;">
+                    <li style="margin: 8px 0;">Open WhatsApp Settings</li>
+                    <li style="margin: 8px 0;">Go to Storage and Data</li>
+                    <li style="margin: 8px 0;">Tap "When using mobile data"</li>
+                    <li style="margin: 8px 0;">Turn OFF photos, videos, audio, and documents</li>
+                </ol>
+                <div class="tip-box">
+                    <strong>💡 Better Safe:</strong> Manually download files only when you trust the sender. This prevents automatic malware execution!
+                </div>
+            </div>
+        </div>
+
+        <div class="section" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #ff9ff3, #f368e0);">📱</div>
+                <h2>Unknown App Installation Risks</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="content">
+                <p>Installing apps from unofficial sources is dangerous:</p>
+                <ul>
+                    <li><strong>Modded Apps:</strong> Fake WhatsApp versions with hidden spyware</li>
+                    <li><strong>APK Files:</strong> Android packages that may contain malware</li>
+                    <li><strong>Temporary Numbers:</strong> Apps requiring phone verification can steal your account</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>💡 Official Sources Only:</strong> Always download apps from Google Play Store (Android) or Apple App Store (iOS). Check developer names and reviews!
+                </div>
+            </div>
+        </div>
+
+        <div class="section" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #54a0ff, #2e86de);">📞</div>
+                <h2>Handle Unknown Calls & Messages</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="content">
+                <p>Protect yourself from suspicious contacts:</p>
+                <ul>
+                    <li><strong>Don't Answer:</strong> Ignore calls from unknown international numbers</li>
+                    <li><strong>Block & Report:</strong> Use WhatsApp's built-in block and report features</li>
+                    <li><strong>Privacy Settings:</strong> Limit who can see your profile photo and status</li>
+                    <li><strong>Group Invites:</strong> Control who can add you to groups</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>💡 Privacy First:</strong> Go to Settings → Account → Privacy and set "Last Seen", "Profile Photo", and "About" to "My Contacts" or "Nobody"!
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Security Checklist -->
+        <div class="quiz">
+            <h2>📋 Security Checklist</h2>
+            <p>Mark the security measures you've completed:</p>
+            <div class="checklist">
+                <div class="checklist-item" onclick="toggleChecklist(this)">
+                    <div class="checkbox"></div>
+                    <span>Enable Two-Factor Authentication</span>
+                </div>
+                <div class="checklist-item" onclick="toggleChecklist(this)">
+                    <div class="checkbox"></div>
+                    <span>Disable auto media download</span>
+                </div>
+                <div class="checklist-item" onclick="toggleChecklist(this)">
+                    <div class="checkbox"></div>
+                    <span>Set profile photo visibility to contacts only</span>
+                </div>
+                <div class="checklist-item" onclick="toggleChecklist(this)">
+                    <div class="checkbox"></div>
+                    <span>Enable group invite restrictions</span>
+                </div>
+                <div class="checklist-item" onclick="toggleChecklist(this)">
+                    <div class="checkbox"></div>
+                    <span>Never share verification code with anyone</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="quiz">
+            <h2>🧠 Knowledge Check Quiz</h2>
+            <p>Test your security knowledge by answering these questions:</p>
+            
+            <div class="question" data-correct="a">
+                <p>1. What should you do if someone asks for your WhatsApp verification code?</p>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'a')">
+                        <span class="option-letter">A</span>
+                        <span>Never share it - report the person</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'b')">
+                        <span class="option-letter">B</span>
+                        <span>Share it if they seem trustworthy</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'c')">
+                        <span class="option-letter">C</span>
+                        <span>Ask them to call you instead</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question" data-correct="c">
+                <p>2. Which setting helps prevent automatic malware download?</p>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'a')">
+                        <span class="option-letter">A</span>
+                        <span>Read receipts enabled</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'b')">
+                        <span class="option-letter">B</span>
+                        <span>Blue ticks enabled</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'c')">
+                        <span class="option-letter">C</span>
+                        <span>Auto media download disabled</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question" data-correct="b">
+                <p>3. What's the best way to verify a friend's urgent money request?</p>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'a')">
+                        <span class="option-letter">A</span>
+                        <span>Send money immediately</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'b')">
+                        <span class="option-letter">B</span>
+                        <span>Call them on their known number</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'c')">
+                        <span class="option-letter">C</span>
+                        <span>Reply asking for more details</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-actions">
+                <button class="btn btn-primary" onclick="submitQuiz()">📝 Submit Answers</button>
+                <button class="btn btn-secondary" onclick="resetQuiz()">🔄 Reset Quiz</button>
+            </div>
+
+            <div class="quiz-result" id="quiz-result">
+                <h3 id="result-title"></h3>
+                <p id="result-message"></p>
+            </div>
+        </div>
+
+        <!-- Completion Badge -->
+        <div class="completion-badge" id="completion-badge">
+            <h2>🎉 Congratulations!</h2>
+            <p>You've completed the WhatsApp Security Awareness Training!</p>
+            <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.9;">Remember to share this knowledge with your friends and family.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🔒 WhatsApp Security Awareness Training | Stay Safe, Stay Informed</p>
+        </div>
+    </div>
+
+    <script>
+        // Section Toggle
+        function toggleSection(element) {
+            // Close all other sections
+            document.querySelectorAll('.section').forEach(section => {
+                if (section !== element) {
+                    section.classList.remove('active');
+                }
+            });
+            
+            // Toggle current section
+            element.classList.toggle('active');
+            updateProgress();
+        }
+
+        // Quiz Option Selection
+        let selectedAnswers = {};
+
+        function selectOption(element, answer) {
+            const question = element.closest('.question');
+            const options = question.querySelectorAll('.option');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            selectedAnswers[question.dataset.correct] = answer;
+        }
+
+        // Submit Quiz
+        function submitQuiz() {
+            const questions = document.querySelectorAll('.question');
+            let correct = 0;
+            let total = questions.length;
+
+            questions.forEach(question => {
+                const correctAnswer = question.dataset.correct;
+                const userAnswer = selectedAnswers[correctAnswer];
+                const options = question.querySelectorAll('.option');
+
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                    if (opt.querySelector('.option-letter').textContent.toLowerCase() === correctAnswer) {
+                        opt.classList.add('correct');
+                    }
+                    if (opt.classList.contains('selected') && opt.querySelector('.option-letter').textContent.toLowerCase() !== correctAnswer) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const resultDiv = document.getElementById('quiz-result');
+            const resultTitle = document.getElementById('result-title');
+            const resultMessage = document.getElementById('result-message');
+
+            resultDiv.classList.add('show');
+
+            if (correct >= 2) {
+                resultDiv.className = 'quiz-result show pass';
+                resultTitle.textContent = '🌟 Great Job!';
+                resultMessage.textContent = `You got ${correct} out of ${total} correct! You're well on your way to becoming a security pro!`;
+                document.getElementById('completion-badge').classList.add('show');
+            } else {
+                resultDiv.className = 'quiz-result show fail';
+                resultTitle.textContent = '📚 Keep Learning!';
+                resultMessage.textContent = `You got ${correct} out of ${total} correct. Review the sections above and try again!`;
+                document.getElementById('completion-badge').classList.remove('show');
+            }
+
+            updateProgress();
+        }
+
+        // Reset Quiz
+        function resetQuiz() {
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            selectedAnswers = {};
+            document.getElementById('quiz-result').classList.remove('show');
+        }
+
+        // Checklist Toggle
+        function toggleChecklist(element) {
+            element.classList.toggle('completed');
+            updateProgress();
+        }
+
+        // Progress Update
+        function updateProgress() {
+            const sections = document.querySelectorAll('.section.active').length;
+            const checklistItems = document.querySelectorAll('.checklist-item.completed').length;
+            const quizCompleted = document.getElementById('quiz-result').classList.contains('show') && 
+                                 document.getElementById('quiz-result').classList.contains('pass');
+
+            const maxSections = 6;
+            const maxChecklist = 5;
+            
+            const sectionProgress = (sections / maxSections) * 40;
+            const checklistProgress = (checklistItems / maxChecklist) * 30;
+            const quizProgress = quizCompleted ? 30 : 0;
+
+            const totalProgress = Math.min(100, sectionProgress + checklistProgress + quizProgress);
+
+            document.getElementById('progress-fill').style.width = totalProgress + '%';
+            document.getElementById('progress-text').textContent = Math.round(totalProgress) + '%';
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+            }
+        });
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

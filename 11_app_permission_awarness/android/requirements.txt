@@ -1,0 +1,29 @@
+# Python Dependencies for Android Icon Generation
+# Install with: pip install -r requirements.txt
+
+Pillow>=9.0.0
+
+# ---------------------------------------------------------
+# Development Environment Setup for Android Permission App
+# ---------------------------------------------------------
+
+# System Requirements:
+# - Java JDK 11 or higher
+# - Android SDK (command line tools)
+# - Gradle 7.x or higher
+# - Python 3.8+
+
+# To set up Android development environment:
+# 1. Install Java: sudo apt install openjdk-11-jdk
+# 2. Download Android command line tools:
+#    https://developer.android.com/studio#command-line-tools-only
+# 3. Set ANDROID_HOME environment variable
+# 4. Accept licenses: sdkmanager --licenses
+# 5. Install required SDK components:
+#    sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
+
+# For running the app on connected device:
+# 1. Enable USB debugging on device
+# 2. Connect device via USB
+# 3. Run: ./gradlew installDebug
+

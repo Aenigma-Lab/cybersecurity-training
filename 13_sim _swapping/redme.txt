@@ -1,0 +1,24 @@
+Setting a SIM PIN is excellent for device-level security, but it does not fully prevent "SIM swap" fraud. There is a critical difference between locking your physical SIM card and locking your account with the carrier. 
+1. What a SIM PIN Protects
+A SIM PIN (set on your phone's settings) protects the physical chip. 
+Airtel
+ +2
+If your phone is stolen: The thief cannot take your SIM card and put it into their own phone to get your calls or texts because their device will demand the PIN.
+If your phone restarts: The SIM won't connect to the network until the PIN is entered. 
+Times of India
+ +3
+2. Why it Doesn't Stop a "SIM Swap"
+In a SIM swap attack, a hacker doesn't need your physical phone. They trick the carrier into "moving" your phone number to a new SIM card they already have. Since they are using a new chip, your old SIM PIN does nothing to stop them. 
+Times of India
+ +5
+3. How to Actually Stop Unauthorized Swaps
+To prevent a hacker from hijacking your number through the carrier, you must enable Account-Level protections: 
+Carrier Account PIN: Set a unique PIN/Passcode with your carrier (e.g., AT&T, T-Mobile). This is required whenever someone calls customer service or visits a store to make changes like a SIM swap.
+SIM Protection/Number Lock: Specific features like Verizon's Number Lock or T-Mobile's Account Takeover Protection explicitly block any attempt to transfer your number to a new SIM or carrier until you manually unlock it.
+Port-Out PIN: Most carriers now require a special "Transfer PIN" (often valid for only a few days) before a number can be moved to a different provider. 
+Aura
+ +7
+Pro-Tip: Use an authenticator app (like Google Authenticator) for your sensitive accounts instead of SMS codes. This way, even if someone successfully swaps your SIM, they still can't log into your bank or email. 
+McAfee
+ +4
+These guides detail methods for preventing SIM swapping and outline the specific account-level security features offered by major mobile carriers:

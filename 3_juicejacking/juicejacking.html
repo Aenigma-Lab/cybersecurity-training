@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juicejacking Simulation</title>
+    <style>
+        :root {
+            --android-primary: #1976d2;
+            --android-secondary: #03dac6;
+            --android-surface: #121212;
+            --android-background: #000000;
+            --android-error: #cf6679;
+            --android-on-primary: #ffffff;
+            --android-on-surface: #ffffff;
+            --android-on-background: #ffffff;
+            --android-text-primary: rgba(255, 255, 255, 0.87);
+            --android-text-secondary: rgba(255, 255, 255, 0.6);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .simulation {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        .charging-station {
+            width: 500px;
+            height: 300px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border: 3px solid #bdc3c7;
+            position: relative;
+        }
+        .station-header {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+        }
+        .station-body {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .usb-port {
+            width: 60px;
+            height: 25px;
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            border-radius: 5px;
+            position: relative;
+            border: 2px solid #666;
+        }
+        .usb-connector {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 56px;
+            height: 21px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 3px;
+        }
+        .cable {
+            position: absolute;
+            top: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100px;
+            background-color: #666;
+            opacity: 0;
+            animation: showCable 2s forwards;
+        }
+        .phone-screen {
+            width: 320px;
+            height: 650px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+            border-radius: 30px;
+            border: 4px solid #000;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.1s ease;
+        }
+        .phone-screen.glitch {
+            animation: glitch 0.3s infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background-color: #000;
+            border-radius: 0 0 15px 15px;
+            z-index: 5;
+        }
+        .phone-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .charging-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        .status {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .progress-bar {
+            width: 80%;
+            height: 10px;
+            background-color: #555;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%;
+        }
+        .permission-prompt {
+            background-color: var(--android-surface);
+            color: var(--android-on-surface);
+            padding: 24px;
+            border-radius: 28px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 10;
+            width: 280px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            animation: dialogAppear 0.3s ease-out;
+        }
+        .permission-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .permission-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .permission-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            color: var(--android-text-secondary);
+            text-align: center;
+        }
+        .device-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+        .device-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .rsa-fingerprint {
+            color: var(--android-text-secondary);
+            font-family: monospace;
+            word-break: break-all;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            border: 2px solid var(--android-on-surface);
+            border-radius: 2px;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .checkbox:checked {
+            background-color: var(--android-primary);
+            border-color: var(--android-primary);
+        }
+        .button-container {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .button {
+            background-color: transparent;
+            color: var(--android-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 64px;
+            transition: background-color 0.2s;
+        }
+        .button:hover {
+            background-color: rgba(25, 118, 210, 0.1);
+        }
+        .button.deny {
+            color: var(--android-error);
+        }
+        .button.deny:hover {
+            background-color: rgba(207, 102, 121, 0.1);
+        }
+        @keyframes dialogAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .warning {
+            color: #ff0000;
+            font-size: 18px;
+            opacity: 0;
+        }
+        .data-transfer {
+            font-size: 16px;
+            opacity: 0;
+            color: #9c27b0;
+        }
+        .data-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            opacity: 0;
+            margin-top: 10px;
+        }
+        .file-icon {
+            font-size: 14px;
+            background-color: rgba(156, 39, 176, 0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            animation: fileTransfer 1s ease-in-out infinite alternate;
+        }
+        .file-icon:nth-child(1) { animation-delay: 0s; }
+        .file-icon:nth-child(2) { animation-delay: 0.2s; }
+        .file-icon:nth-child(3) { animation-delay: 0.4s; }
+        .file-icon:nth-child(4) { animation-delay: 0.6s; }
+        .file-icon:nth-child(5) { animation-delay: 0.8s; }
+        @keyframes fileTransfer {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+        .apk-install {
+            font-size: 16px;
+            opacity: 0;
+            color: #ff6b35;
+        }
+        @keyframes showCable {
+            0% { opacity: 0; height: 0; }
+            100% { opacity: 1; height: 100px; }
+        }
+        @keyframes charge {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        @keyframes malwareInstall {
+            0% { width: 0%; background-color: #ff9800; }
+            100% { width: 100%; background-color: #ff9800; }
+        }
+        @keyframes dataTransfer {
+            0% { width: 0%; background-color: #9c27b0; }
+            100% { width: 100%; background-color: #9c27b0; }
+        }
+        @keyframes showWarning {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .full-screen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .alert {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+        .apk-installer {
+            background-color: var(--android-surface);
+            color: var(--android-on-surface);
+            padding: 24px;
+            border-radius: 28px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 10;
+            width: 320px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            animation: dialogAppear 0.3s ease-out;
+        }
+        .installer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .app-icon {
+            font-size: 48px;
+            margin-right: 16px;
+        }
+        .app-info {
+            flex: 1;
+        }
+        .app-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .app-developer {
+            font-size: 14px;
+            color: var(--android-text-secondary);
+        }
+        .source-badge {
+            background-color: var(--android-error);
+            color: var(--android-on-primary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .permissions-list {
+            margin-bottom: 24px;
+        }
+        .permission-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        .permission-item .permission-icon {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+        .install-progress {
+            margin-bottom: 24px;
+        }
+        .progress-text {
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-align: center;
+            color: var(--android-text-secondary);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: var(--android-primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .installer-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .consequences-screen, .prevention-screen {
+            background-color: var(--android-surface);
+            color: var(--android-on-surface);
+            padding: 32px;
+            border-radius: 28px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .consequences-screen h2, .prevention-screen h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--android-error);
+        }
+        .stolen-data, .malware-effects {
+            margin-bottom: 24px;
+        }
+        .stolen-data h3, .malware-effects h3 {
+            color: var(--android-error);
+            margin-bottom: 12px;
+        }
+        .stolen-data ul, .malware-effects ul {
+            list-style: none;
+            padding: 0;
+        }
+        .stolen-data li, .malware-effects li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tips-list {
+            margin-bottom: 24px;
+        }
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tip-icon {
+            font-size: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        .tip-content h4 {
+            margin: 0 0 8px 0;
+            color: var(--android-primary);
+        }
+        .tip-content p {
+            margin: 0;
+            color: var(--android-text-secondary);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="simulation">
+        <div class="charging-station">
+            <div class="station-header">PUBLIC CHARGING STATION</div>
+            <div class="station-body">
+                <div class="usb-port">
+                    <div class="usb-connector"></div>
+                </div>
+            </div>
+        </div>
+        <div class="cable"></div>
+        <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="phone-content">
+                <div class="charging-icon">🔋</div>
+                <div class="status">Charging...</div>
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="permission-prompt" id="permissionPrompt">
+                    <div class="permission-icon">💻</div>
+                    <div class="permission-title">Allow USB debugging?</div>
+                    <div class="permission-text">The computer "USB Computer" is requesting permission to transfer files and access device storage.</div>
+                    <div class="device-info">
+                        <div class="device-name">USB Computer</div>
+                        <div class="rsa-fingerprint">RSA: 12:34:56:78:9a:bc:de:f0:12:34:56:78:9a:bc:de:f0</div>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" class="checkbox" id="alwaysAllow">
+                        <label for="alwaysAllow">Always allow from this computer</label>
+                    </div>
+                    <div class="button-container">
+                        <button class="button deny" id="denyBtn">DENY</button>
+                        <button class="button" id="allowBtn">ALLOW</button>
+                    </div>
+                </div>
+                <div class="apk-install" id="apkInstall">📱 Installing malicious APK...</div>
+                <div class="data-transfer" id="dataTransfer">📤 Transferring data to external device...</div>
+                <div class="warning" id="warning">⚠️ Security Alert: Unauthorized USB access detected!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- APK Installer Screen -->
+    <div class="apk-installer" id="apkInstaller">
+            <div class="installer-header">
+                <div class="app-icon">📱</div>
+                <div class="app-info">
+                    <div class="app-name">System Update</div>
+                    <div class="app-developer">Android System</div>
+                </div>
+                <div class="source-badge">Source: Unknown</div>
+            </div>
+            <div class="permissions-list">
+                <div class="permission-item">
+                    <span class="permission-icon">📞</span>
+                    <span>Phone</span>
+                </div>
+                <div class="permission-item">
+                    <span class="permission-icon">💾</span>
+                    <span>Storage</span>
+                </div>
+                <div class="permission-item">
+                    <span class="permission-icon">📍</span>
+                    <span>Location</span>
+                </div>
+                <div class="permission-item">
+                    <span class="permission-icon">📧</span>
+                    <span>Contacts</span>
+                </div>
+            </div>
+            <div class="install-progress">
+                <div class="progress-text" id="progressText">Ready to install</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <div class="installer-buttons">
+                <button class="button deny" id="cancelBtn">CANCEL</button>
+                <button class="button" id="installBtn">INSTALL</button>
+            </div>
+        </div>
+
+    <!-- Data Files -->
+    <div class="data-files" id="dataFiles">
+        <div class="file-icon">📁 contacts.db</div>
+        <div class="file-icon">📁 messages.db</div>
+        <div class="file-icon">📁 photos/</div>
+        <div class="file-icon">📁 location.db</div>
+        <div class="file-icon">📁 appdata/</div>
+    </div>
+</div>
+    <div class="full-screen-overlay" id="alertOverlay">
+        <div class="alert">
+            <h2>Juicejacking Attack Completed!</h2>
+            <p>Your device has been compromised.</p>
+            <p>Malware (including APK) installed and data stolen via public USB port.</p>
+        </div>
+    </div>
+
+    <script>
+        // Request full screen on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Safari
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE11
+                document.documentElement.msRequestFullscreen();
+            }
+
+            // Start the simulation
+            startSimulation();
+        });
+
+        function startSimulation() {
+            const progress = document.getElementById('progress');
+            const permissionPrompt = document.getElementById('permissionPrompt');
+            const allowBtn = document.getElementById('allowBtn');
+            const denyBtn = document.getElementById('denyBtn');
+            const warning = document.getElementById('warning');
+            const dataTransfer = document.getElementById('dataTransfer');
+            const alertOverlay = document.getElementById('alertOverlay');
+
+            // Step 1: Show charging progress
+            setTimeout(() => {
+                progress.style.animation = 'charge 3s ease-in-out forwards';
+            }, 1000);
+
+            // Step 2: Show permission prompt after charging starts
+            setTimeout(() => {
+                permissionPrompt.style.display = 'block';
+            }, 4000);
+
+            // Handle allow button click
+            allowBtn.addEventListener('click', () => {
+                permissionPrompt.style.display = 'none';
+
+                // Step 3: Show APK installer screen
+                setTimeout(() => {
+                    const apkInstaller = document.getElementById('apkInstaller');
+                    apkInstaller.style.display = 'block';
+                    startApkInstallation();
+                }, 500);
+            });
+
+            function startApkInstallation() {
+                const progressText = document.getElementById('progressText');
+                const progressFill = document.getElementById('progressFill');
+                const installBtn = document.getElementById('installBtn');
+                const cancelBtn = document.getElementById('cancelBtn');
+                const apkInstall = document.getElementById('apkInstall');
+                const dataTransfer = document.getElementById('dataTransfer');
+                const warning = document.getElementById('warning');
+                const alertOverlay = document.getElementById('alertOverlay');
+
+                // Handle install button
+                installBtn.addEventListener('click', () => {
+                    installBtn.disabled = true;
+                    cancelBtn.disabled = true;
+
+                    // Start glitch effect during installation
+                    const phoneScreen = document.querySelector('.phone-screen');
+                    phoneScreen.classList.add('glitch');
+
+                    // Installation steps
+                    const steps = [
+                        { text: 'Verifying app...', duration: 1000, progress: 25 },
+                        { text: 'Opening APK...', duration: 1500, progress: 50 },
+                        { text: 'Installing...', duration: 2000, progress: 75 },
+                        { text: 'Done ✓', duration: 500, progress: 100 }
+                    ];
+
+                    let currentStep = 0;
+
+                    function nextStep() {
+                        if (currentStep < steps.length) {
+                            const step = steps[currentStep];
+                            progressText.textContent = step.text;
+                            progressFill.style.width = step.progress + '%';
+
+                            setTimeout(() => {
+                                currentStep++;
+                                nextStep();
+                            }, step.duration);
+                        } else {
+                            // Stop glitch effect
+                            phoneScreen.classList.remove('glitch');
+
+                            // Installation complete, hide installer
+                            document.getElementById('apkInstaller').style.display = 'none';
+
+                            // Step 4: Show data transfer
+                            setTimeout(() => {
+                                apkInstall.style.opacity = '1';
+                                dataTransfer.style.opacity = '1';
+                                const dataFiles = document.getElementById('dataFiles');
+                                dataFiles.style.opacity = '1';
+                                progress.style.animation = 'dataTransfer 2s ease-in-out forwards';
+                            }, 500);
+
+                            // Step 5: Show security warning
+                            setTimeout(() => {
+                                warning.style.opacity = '1';
+                            }, 2500);
+
+                            // Step 6: Show consequences screen
+                            setTimeout(() => {
+                                const consequencesOverlay = document.getElementById('consequencesOverlay');
+                                consequencesOverlay.style.display = 'flex';
+                            }, 4500);
+                        }
+                    }
+
+                    nextStep();
+                });
+
+                // Handle cancel button with warning
+                cancelBtn.addEventListener('click', () => {
+                    alert('Warning: Canceling installation may leave your device vulnerable. Are you sure?');
+                });
+            }
+
+            // Handle deny button click (ends simulation safely)
+            denyBtn.addEventListener('click', () => {
+                permissionPrompt.style.display = 'none';
+                alert('Access denied. Device safe from juicejacking attack.');
+            });
+        }
+    </script>
+</body>
+</html>

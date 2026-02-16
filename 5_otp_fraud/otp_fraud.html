@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuards: Stop OTP Fraud</title>
+    <style>
+        :root {
+            --primary: #1a2a6c;
+            --accent: #b21f1f;
+            --light: #f8f9fa;
+            --dark: #2d3436;
+            --success: #2ecc71;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f0f2f5;
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(26, 42, 108, 0.8), rgba(26, 42, 108, 0.8)), 
+                        url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: -40px auto 40px;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h2 { color: var(--primary); font-size: 1.8rem; margin-top: 0; }
+        
+        /* Grid Layout for Fraud Types */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .method-box {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .method-box:hover { transform: translateY(-5px); }
+        .method-box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .method-content { padding: 15px; }
+        .method-content h3 { margin: 0 0 10px 0; color: var(--accent); font-size: 1.2rem; }
+
+        /* Prevention Section */
+        .prevention-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .prevention-img {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 12px;
+        }
+        .prevention-list {
+            flex: 1;
+            min-width: 300px;
+            list-style: none;
+            padding: 0;
+        }
+        .prevention-list li {
+            background: #e8f5e9;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-left: 5px solid var(--success);
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .alert-banner {
+            background: #ffebee;
+            border: 2px dashed var(--accent);
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        footer { text-align: center; padding: 40px; color: #636e72; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Stop the Scammers: OTP Security Guide</h1>
+    <p>Your OTP is the key to your digital vault. Keep it safe.</p>
+</header>
+
+<div class="container">
+    
+    <section class="card">
+        <h2>How OTP Fraud Happens</h2>
+        <p>Cybercriminals use psychological tricks to steal your One-Time Password.</p>
+        
+        <div class="grid">
+            <div class="method-box">
+                <img src="https://images.unsplash.com/photo-1589156191108-c762ff4b96ab?auto=format&fit=crop&w=500&q=60" alt="Fake Call">
+                <div class="method-content">
+                    <h3>The Fake Call</h3>
+                    <p>Scammers pose as bank staff or "support" and ask for your OTP to "verify" your account.</p>
+                </div>
+            </div>
+
+            <div class="method-box">
+                <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=500&q=60" alt="Phishing Link">
+                <div class="method-content">
+                    <h3>Malicious Links</h3>
+                    <p>You receive an SMS with a link to a fake "KYC update" page that steals your code.</p>
+                </div>
+            </div>
+
+            <div class="method-box">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=500&q=60" alt="App Download">
+                <div class="method-content">
+                    <h3>Remote Access</h3>
+                    <p>They trick you into installing screen-sharing apps like AnyDesk to see your messages.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>How to Prevent It</h2>
+        <div class="prevention-row">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60" class="prevention-img" alt="Safe Banking">
+            <ul class="prevention-list">
+                <li>✅ Never share your OTP with anyone, even bank staff.</li>
+                <li>✅ Read the OTP message carefully to see what it's for.</li>
+                <li>✅ Never click on links in suspicious SMS messages.</li>
+                <li>✅ Enable Two-Factor Authentication (2FA) via Auth Apps.</li>
+                <li>✅ Report suspicious calls to your bank immediately.</li>
+            </ul>
+        </div>
+        
+        <div class="alert-banner">
+            ⚠️ REMEMBER: A legitimate bank will NEVER ask for your OTP.
+        </div>
+    </section>
+
+    <section class="card" style="border-top: 5px solid var(--accent);">
+        <h2>In Case of Fraud?</h2>
+        <p>If you have shared your OTP accidentally:</p>
+        <ol>
+            <li>Call your bank's <strong>official helpline</strong> to block your card.</li>
+            <li>Report the crime at <strong>cybercrime.gov.in</strong> (or your local authority).</li>
+            <li>Change all your passwords immediately.</li>
+        </ol>
+    </section>
+
+    
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Awareness Portal | Stay Safe Online</p>
+    <p style="font-size: 0.8rem;">Reminder: Your next Ekadashi is on 23 April.</p>
+</footer>
+
+</body>
+</html>

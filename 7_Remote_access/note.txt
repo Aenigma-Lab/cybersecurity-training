@@ -1,0 +1,2 @@
+can copy clipboard ( like password )
+and if you are giving remote then block file tranfer or from option disable untick file transfer .

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Blue gradient background -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#1565C0"
+                android:endColor="#42A5F5"
+                android:type="linear"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+    <!-- Shield shape (simplified as a path) -->
+    <item
+        android:drawable="@color/white"
+        android:width="48dp"
+        android:height="48dp"
+        android:gravity="center"/>
+</layer-list>
