@@ -1,10 +1,11 @@
-# Cybersecurity Training Program
+# Cybersecurity Training
 
-![Cybersecurity](https://img.shields.io/badge/Cybersecurity-Awareness_Training-blue)
+![Cybersecurity](https://img.shields.io/badge/Cybersecurity-Training-blue)
 ![License](https://img.shields.io/badge/License-Educational_Purpose-green)
 ![Platform](https://img.shields.io/badge/Platform-Web_Based-orange)
+![Repository](https://img.shields.io/badge/Repository-cybersecurity--training-blueviolet)
 
-A comprehensive cybersecurity awareness training program designed to educate citizens about prevalent cyber threats, fraud schemes, and protective measures in today's digital landscape.
+> A comprehensive cybersecurity awareness training program to educate citizens about prevalent cyber threats, fraud schemes, and protective measures.
 
 ## 📋 Overview
 
@@ -65,7 +66,7 @@ This program covers the following cybersecurity topics:
    
 ```
 bash
-   git clone <repository-url>
+   git clone https://github.com/Aenigma-Lab/cybersecurity-training.git
    
 ```
 
@@ -73,7 +74,7 @@ bash
    
 ```
 bash
-   cd cybersecurity
+   cd cybersecurity-training
    
 ```
 
